@@ -3,11 +3,11 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 class UserBaseSchema(BaseModel):
-    email:      Optional[str] = Field(example="foo@email.com")
+    email:      Optional[str] = Field(example="foo_bar@email.com")
     username:   Optional[str] = Field(example="foo.bar")
     first_name: Optional[str] = Field(example="Foo")
     last_name:  Optional[str] = Field(example="Bar")    
-    gender:     Optional[str] = Field(example="Male")
+    gender:     Optional[str] = Field(example="Male", default=None)
     entity:     Optional[str] = Field(example="student")
 
 class UserUpdateSchema(UserBaseSchema):
@@ -15,13 +15,13 @@ class UserUpdateSchema(UserBaseSchema):
     status:     Optional[str] = Field(..., example="active") 
 
 class UserResponseSchema(UserBaseSchema):
-    email:      str           = Field(..., example="foo@email.com")
+    email:      str           = Field(..., example="foo_bar@email.com")
     username:   str           = Field(..., example="foo.bar")
     first_name: str           = Field(..., example="Foo")
     last_name:  str           = Field(..., example="Bar")    
 
 class UserRequestSchema(UserBaseSchema):
-    email:      str           = Field(..., example="foo@email.com")
+    email:      str           = Field(..., example="foo_bar@email.com")
     username:   str           = Field(..., example="foo.bar")
     password:   str           = Field(..., example="Str0ngP@ssw0rd")
     first_name: str           = Field(..., example="Foo") 

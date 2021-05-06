@@ -1,4 +1,6 @@
+import uuid
 from typing import Optional
+from datetime import datetime 
 from base_repository import BaseRepository
 from helpers.security import Auth
 from src.models.user_model import UserModel
@@ -13,9 +15,24 @@ class UserRepository(BaseRepository[UserModel, UserRequestSchema, UserUpdateSche
 
     def create(self, db: Session, *, req_object: UserRequestSchema) -> User:
         db_object = UserModel(
-            email=req_object.email    
+            id= uuid.uuid4(),
+            email=req_object.email,
+            username=req_object.username,
+            first_name=req_object.first_name,
+            last_name=req_object.last_name,
+            entity=req_object.entity,
+            gender=req_object.gender,
+            password=Auth.hash_password(req_object.password),
+            status='active',
+            created_at=datetime.utcnow()
         )
-        pass
+
+        db.add(db_object)
+        db.commit()
+        db.refresh(db_object)
+        
+        return db_object
+        
 
 
 UserRepository = UserRepository(UserModel)

@@ -4,7 +4,7 @@ from src.database.base_class import Base
 class UserModel(Base):
     __tablename__   = "users"
 
-    id              = Column(Integer  , nullable=False, index=True, primary_key=True)
+    id              = Column(String   , nullable=False, index=True, primary_key=True)
     email           = Column(String   , nullable=False, index=True, unique=True)
     username        = Column(String   , nullable=False, index=True, unique=True)
     first_name      = Column(String   , nullable=False)

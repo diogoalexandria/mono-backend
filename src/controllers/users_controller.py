@@ -5,7 +5,7 @@ from src.repositories.user_repository import User
 
 router = APIRouter()
 
-@router.post('/users', response_model=UserResponseSchema)
+@router.post('/users', response_model=UserResponseSchema, status_code=201)
 def create(user: UserModel) -> Any:
     new_user = User
     
