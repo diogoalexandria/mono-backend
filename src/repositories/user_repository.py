@@ -30,9 +30,11 @@ class UserRepository(BaseRepository[UserModel, UserRequestSchema, UserUpdateSche
         db.add(db_object)
         db.commit()
         db.refresh(db_object)
-        
+
         return db_object
-        
+
+    def update():
+        pass       
 
 
 UserRepository = UserRepository(UserModel)
