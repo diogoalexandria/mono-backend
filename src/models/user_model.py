@@ -1,0 +1,17 @@
+from sqlalchemy import Column, Boolean, Integer, String, DateTime
+from src.database.base_class import Base
+
+class UserModel(Base):
+    __tablename__   = "users"
+
+    id              = Column(Integer  , nullable=False, index=True, primary_key=True)
+    email           = Column(String   , nullable=False, index=True, unique=True)
+    username        = Column(String   , nullable=False, index=True, unique=True)
+    first_name      = Column(String   , nullable=False)
+    last_name       = Column(String   , nullable=False)    
+    password        = Column(String   , nullable=False)
+    entity          = Column(String   , nullable=False)
+    gender          = Column(String   , nullable=True)
+    status          = Column(String   , nullable=False, default="active")
+    created_at      = Column(DateTime , nullable=False)
+    updated_at      = Column(DateTime , nullable=True)
