@@ -16,7 +16,7 @@ class UserRepository(BaseRepository[UserModel, UserRequestSchema, UserUpdateSche
 
     def create(self, db: Session, *, req_object: UserRequestSchema) -> UserModel:
         db_object = UserModel(
-            id= uuid.uuid4(),
+            id=uuid.uuid4(),
             email=req_object.email,
             username=req_object.username,
             first_name=req_object.first_name,

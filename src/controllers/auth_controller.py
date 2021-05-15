@@ -5,14 +5,14 @@ from src.helpers.auth import Auth
 from src.helpers.user import is_active
 from src.helpers.email import is_email
 from src.database.session import db_session
-from src.schemas.auth_schemas import AuthRequestSchema
+from src.schemas.auth_schemas import AuthRequestSchema, TokenResponseSchema
 from src.repositories.user_repository import UserRepository
 
 router = APIRouter()
 
-@router.post('/auth')
-def login(payload: AuthRequestSchema, db: Session = Depends(db_session)) -> Any:
-    identity, password = payload.values()
+@router.post('/auth', response_model=TokenResponseSchema)
+def login(payload: AuthRequestSchema, db: Session = Depends(db_session)) -> Any:    
+    identity, password = dict(payload).values()    
 
     if is_email(identity):
         user = UserRepository.get_by_email(db, email=identity)
