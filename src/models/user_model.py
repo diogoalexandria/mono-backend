@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Boolean, Integer, String, DateTime
+from sqlalchemy import Column, String, DateTime
 from src.database.base_class import Base
 
 class UserModel(Base):

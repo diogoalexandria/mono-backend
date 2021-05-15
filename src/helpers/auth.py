@@ -1,7 +1,9 @@
+import os
 import jwt
+from typing import Union, Any
 from fastapi import HTTPException, Security
-from fastapi import HTTPAuthorizationCredentials, HTTPBearer
-from passlib import CryptContext
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from passlib.context import CryptContext
 from datetime import datetime, timedelta
 
 class AuthHandler():
@@ -33,7 +35,7 @@ class AuthHandler():
             algorithm='HS256'
         )
     
-    def deccode_token(self, token):
+    def decode_token(self, token):
         try:
             payload = jwt.decode(token, self.secret, algorithm=['HS256'])
             return payload['sub']

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 #from starlette.middleware.cors import CORSMiddleware
-from db.database import database
-from routes import router
+#from database import database
+from src.routes import routes
 
 app = FastAPI(
     docs_url="/api/v1/docs",
@@ -20,4 +20,4 @@ app = FastAPI(
 #async def shutdown():
 #    await database.disconnect()
 
-app.include_router(router, prefix="/api/v1")
+app.include_router(routes.router, prefix="/api")

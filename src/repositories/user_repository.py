@@ -1,10 +1,11 @@
 import uuid
 from typing import Optional
-from datetime import datetime 
-from base_repository import BaseRepository
-from helpers.security import Auth
+from datetime import datetime
+from sqlalchemy.orm import Session 
+from src.helpers.auth import Auth
 from src.models.user_model import UserModel
-from src.schema.users_schemas import UserRequestSchema, UserUpdateSchema
+from src.schemas.users_schemas import UserRequestSchema, UserUpdateSchema
+from src.repositories.base_repository import BaseRepository
 
 class UserRepository(BaseRepository[UserModel, UserRequestSchema, UserUpdateSchema]):
     def get_by_email(self, db: Session, *, email: str) -> Optional[UserModel]:
@@ -13,7 +14,7 @@ class UserRepository(BaseRepository[UserModel, UserRequestSchema, UserUpdateSche
     def get_by_username(self, db: Session, *, username: str):
         return db.query(UserModel).filter(UserModel.username == username).first()
 
-    def create(self, db: Session, *, req_object: UserRequestSchema) -> User:
+    def create(self, db: Session, *, req_object: UserRequestSchema) -> UserModel:
         db_object = UserModel(
             id= uuid.uuid4(),
             email=req_object.email,

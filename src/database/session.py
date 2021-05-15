@@ -1,5 +1,5 @@
 from typing import Generator
-from conn import SessionLocal
+from src.database.conn import SessionLocal
 
 def db_session() -> Generator:
     try:
