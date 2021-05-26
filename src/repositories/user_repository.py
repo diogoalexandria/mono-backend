@@ -8,7 +8,7 @@ from src.schemas.users_schemas import UserRequestSchema, UserUpdateSchema
 from src.repositories.base_repository import BaseRepository
 
 class UserRepository(BaseRepository[UserModel, UserRequestSchema, UserUpdateSchema]):
-    def get_by_id(self, db: Session, id: str) -> Optional[UserModel]:
+    def get_by_id(self, db: Session, *, id: str) -> Optional[UserModel]:
         return super().get_by_id(db, id)
 
     def get_by_email(self, db: Session, *, email: str) -> Optional[UserModel]:
@@ -17,7 +17,7 @@ class UserRepository(BaseRepository[UserModel, UserRequestSchema, UserUpdateSche
     def get_by_username(self, db: Session, *, username: str) -> Optional[UserModel]:
         return db.query(UserModel).filter(UserModel.username == username).first()
 
-    def get_all(self, db: Session, *, skip: int, limit: int = 100) -> List[UserModel]:
+    def get_all(self, db: Session, *, skip: int, limit: int) -> List[UserModel]:
         return super().get_all(db, skip=skip, limit=limit)
 
     def create(self, db: Session, *, req_object: UserRequestSchema) -> UserModel:
@@ -44,11 +44,10 @@ class UserRepository(BaseRepository[UserModel, UserRequestSchema, UserUpdateSche
         pass
         
     def is_admin(self, db: Session, *, id: str):
-        user = self.get_by_id(id)
+        user = self.get_by_id(db, id)
         if user.entity != "administrator":
             return False
         
-        return True
-        
+        return True       
 
 UserRepository = UserRepository(UserModel)

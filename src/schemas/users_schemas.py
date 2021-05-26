@@ -14,10 +14,15 @@ class UserUpdateSchema(UserBaseSchema):
     status:     Optional[str] = Field(..., example="active") 
 
 class UserResponseSchema(UserBaseSchema):
+    id:         str           = Field(..., example="Str0ngP@ssw0rd")
     email:      str           = Field(..., example="foo_bar@email.com")
     username:   str           = Field(..., example="foo.bar")
     first_name: str           = Field(..., example="Foo")
-    last_name:  str           = Field(..., example="Bar")    
+    last_name:  str           = Field(..., example="Bar")
+
+class ListUsersRequestSchema(BaseModel):
+    skip:       Optional[int] = Field(example=0)
+    limit:      Optional[int] = Field(example=100)       
 
 class UserRequestSchema(UserBaseSchema):
     email:      str           = Field(..., example="foo_bar@email.com")

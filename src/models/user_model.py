@@ -13,5 +13,6 @@ class UserModel(Base):
     entity          = Column(String   , nullable=False)
     gender          = Column(String   , nullable=True)
     status          = Column(String   , nullable=False, default="active")
+    course_id       = Column(String   , nullable=True)
     created_at      = Column(DateTime , nullable=False)
     updated_at      = Column(DateTime , nullable=True)
