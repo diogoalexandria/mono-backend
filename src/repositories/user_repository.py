@@ -1,5 +1,5 @@
 import uuid
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 from sqlalchemy.orm import Session 
 from src.helpers.auth import Auth
@@ -8,11 +8,17 @@ from src.schemas.users_schemas import UserRequestSchema, UserUpdateSchema
 from src.repositories.base_repository import BaseRepository
 
 class UserRepository(BaseRepository[UserModel, UserRequestSchema, UserUpdateSchema]):
+    def get_by_id(self, db: Session, id: str) -> Optional[UserModel]:
+        return super().get_by_id(db, id)
+
     def get_by_email(self, db: Session, *, email: str) -> Optional[UserModel]:
         return db.query(UserModel).filter(UserModel.email == email).first()
         
-    def get_by_username(self, db: Session, *, username: str):
+    def get_by_username(self, db: Session, *, username: str) -> Optional[UserModel]:
         return db.query(UserModel).filter(UserModel.username == username).first()
+
+    def get_all(self, db: Session, *, skip: int, limit: int = 100) -> List[UserModel]:
+        return super().get_all(db, skip=skip, limit=limit)
 
     def create(self, db: Session, *, req_object: UserRequestSchema) -> UserModel:
         db_object = UserModel(
@@ -34,8 +40,15 @@ class UserRepository(BaseRepository[UserModel, UserRequestSchema, UserUpdateSche
 
         return db_object
 
-    def update():
-        pass       
-
+    def update():        
+        pass
+        
+    def is_admin(self, db: Session, *, id: str):
+        user = self.get_by_id(id)
+        if user.entity != "administrator":
+            return False
+        
+        return True
+        
 
 UserRepository = UserRepository(UserModel)

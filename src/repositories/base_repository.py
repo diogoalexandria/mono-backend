@@ -13,7 +13,7 @@ class BaseRepository(Generic[ModelType, RequestSchemaType, UpdateRequestSchemaTy
     def __init__(self, model: Type[ModelType]):
         self.model = model
 
-    def get_by_id(self, db: Session, id: Any) -> Optional[ModelType]:
+    def get_by_id(self, db: Session, id: str) -> Optional[ModelType]:
         return db.query(self.model)\
                 .filter(self.model.id == id)\
                 .first()

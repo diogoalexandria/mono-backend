@@ -1,10 +1,12 @@
 import os
 import jwt
 from typing import Union, Any
+from sqlalchemy.orm.session import Session
 from fastapi import HTTPException, Security
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
+
 
 class AuthHandler():
     security = HTTPBearer()
@@ -14,7 +16,7 @@ class AuthHandler():
     def hash_password(self, password: str):
         return self.password_context.hash(password)
     
-    def verify_password(self, plain_password: str, hashed_password: str()):
+    def verify_password(self, plain_password: str, hashed_password: str):
         return self.password_context.verify(plain_password, hashed_password)
     
     def encode_token(self, subject: Union[str, Any] , expires_delta: timedelta = None):
@@ -45,6 +47,6 @@ class AuthHandler():
             raise HTTPException(status_code=401, detail='Token inválido.')
     
     def wrapper(self, auth: HTTPAuthorizationCredentials = Security(security)):        
-        return self.decode_token(auth.credentials)
+        return self.decode_token(auth.credentials)    
 
 Auth = AuthHandler()
