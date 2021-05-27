@@ -1,7 +1,7 @@
-from typing import Optional
 from uuid import UUID
-from sqlalchemy.sql.sqltypes import Enum
+from typing import Optional
 from pydantic import BaseModel, Field
+from sqlalchemy.sql.sqltypes import Enum
 
 class UsersEntities(str, Enum):
     administrator= "administrator"

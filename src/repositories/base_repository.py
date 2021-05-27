@@ -1,10 +1,9 @@
-from typing import Generic, TypeVar, Type, Optional, List, Union
+from typing import Generic, TypeVar, Type, Optional, List, Union, Dict, Any
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from fastapi.encoders import jsonable_encoder
-from src.database.base_class import Base
 
-ModelType = TypeVar("ModelType", bound=Base)
+ModelType = TypeVar("ModelType", bound=BaseModel)
 RequestSchemaType = TypeVar("RequestSchemaType", bound=BaseModel)
 UpdateRequestSchemaType = TypeVar("UpdateRequestSchemaType", bound=BaseModel)
 
@@ -33,30 +32,21 @@ class BaseRepository(Generic[ModelType, RequestSchemaType, UpdateRequestSchemaTy
 
         return db_object
 
-    def update(self, db:Session, *, db_object: ModelType, req_object: Union[UpdateRequestSchemaType, dict]):
+    def update(self, db:Session, *, db_object: ModelType, req_object: Union[UpdateRequestSchemaType, Dict[str, Any]]):
         
-        incoming_object = req_object.dict(exclude_unset=True)
+        if isinstance(req_object, dict):                           # Teste se o objeto vindo da requisição é do tipo dict
+            incoming_object = req_object
+        else:            
+            incoming_object = req_object.dict(exclude_unset=True)        
         
-        updated_object = db_object.copy(update=incoming_object)
+        json_object = jsonable_encoder(db_object)                  # Transformando o objeto do banco em um objeto iterável 
+        for field in json_object:                                  # Para cada campo no objeto iterável
+            if field in incoming_object:                           # Se o campo também existe no objeto vindo com a novas infos
+                setattr(db_object, field, incoming_object[field])  # Atualiza o objeto do banco com o valor do objeto da requisição
 
-        db.add(updated_object)
+        db.add(db_object)
         db.commit()
-        db.refresh(updated_object)
-
-        # json_object = jsonable_encoder(db_object)
-
-        # if isinstance(req_object, dict):
-        #     update_object = req_object
-        # else:
-        #     update_object = req_object.dict(exclude_unset=True)
-        
-        # for field in json_object:
-        #     if field in update_object:
-        #         setattr(db_object, field, update_object[field])
-        
-        # db.add(db_object)
-        # db.commit()
-        # db.refresh(db_object)
+        db.refresh(db_object)       
         
         return db_object
 

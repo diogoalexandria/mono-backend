@@ -1,5 +1,5 @@
-import uvicorn
 from src.config import PORT
+import uvicorn
 import src.server.main
 
 def app(): 

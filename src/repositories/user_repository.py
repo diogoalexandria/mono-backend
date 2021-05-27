@@ -1,5 +1,5 @@
 import uuid
-from typing import Optional, List, Union
+from typing import Optional, List, Union, Dict, Any
 from datetime import datetime
 from sqlalchemy.orm import Session 
 from src.helpers.auth import Auth
@@ -40,7 +40,7 @@ class UserRepository(BaseRepository[UserModel, UserRequestSchema, UserUpdateSche
     def get_all(self, db: Session, *, skip: int, limit: int) -> List[UserModel]:
         return super().get_all(db, skip=skip, limit=limit)
 
-    def update(self, db: Session, *, db_object: UserModel, req_object: Union[UserUpdateSchema, dict]):
+    def update(self, db: Session, *, db_object: UserModel, req_object: Union[UserUpdateSchema,  Dict[str, Any]]):
         return super().update(db, db_object=db_object, req_object=req_object)
 
     def remove(self, db: Session, *, id: int) -> UserModel:

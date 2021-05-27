@@ -1,11 +1,11 @@
-from src.config import DATABASE_URL
-from typing import Any, List, Union
+from typing import Any, List, Union, Dict, Any
 from fastapi import APIRouter, Depends, HTTPException
+from src.config import DATABASE_URL
 from sqlalchemy.orm import Session
 from src.helpers.auth import Auth
 from src.helpers.user import is_admin, is_current_user, create_response_user
-from src.schemas.users_schemas import UserResponseSchema, UserRequestSchema, ListUsersRequestSchema, UserUpdateSchema
 from src.database.session import db_session
+from src.schemas.users_schemas import UserResponseSchema, UserRequestSchema, ListUsersRequestSchema, UserUpdateSchema
 from src.repositories.user_repository import UserRepository
 
 router = APIRouter()
@@ -30,7 +30,7 @@ def create(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session)
 
 @router.get('/users', response_model=List[UserResponseSchema])
 def list_users(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session),  config: ListUsersRequestSchema) -> Any:    
-    skip, limit = dict(config).values()    
+    skip, limit = dict(config).values() # Desestruturando (Unpacking) os valores do Request Body config
     users = UserRepository.get_all(db, skip=skip, limit=limit)
     
     response_users = []
@@ -39,22 +39,44 @@ def list_users(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_sess
     
     return response_users
 
+
 @router.get('/users/{id}', response_model=UserResponseSchema)
 def list_user(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session), id=id) -> Any:       
-    user = UserRepository.get_by_id(db, id=id)  
+    user = UserRepository.get_by_id(db, id=id)
+
+    if not user:        
+        raise HTTPException( status_code=400, detail="Usuário não encontrado." )  
     
     return create_response_user(user)
 
+
 @router.patch('/users/{id}', response_model=UserResponseSchema, status_code=202)
-def update(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session), new_infos: Union[UserUpdateSchema, dict], id=id) -> Any:
-    new_infos['id'] = id   
+def update(
+
+    income_id=Depends(Auth.wrapper),
+    *,
+    db: Session = Depends(db_session),
+    new_infos: Union[UserUpdateSchema,  Dict[str, Any]],
+    id=id 
     
-    if not is_admin(db, id=income_id) or not is_current_user(income_id=income_id, action_id=id):
+) -> Any:
+    # Reforçando que o id que chega no Params seja o mesmo que o Request Body
+    new_infos['id'] = id    
+    
+    if not is_admin(db, id=income_id) and not is_current_user(income_id=income_id, action_id=id):
         raise HTTPException( status_code=401, detail="Sem permissão para realizar essa ação." )
 
-    updated_user = UserRepository.update(db, req_object=new_infos)
+    current_user = UserRepository.get_by_id(db, id=id)
+    if not current_user:
+        raise HTTPException( status_code=400, detail="Usuário não encontrado." )
+    
+    if "password" in new_infos:       
+        new_infos["password"] = Auth.hash_password(new_infos["password"])
+
+    updated_user = UserRepository.update(db, db_object=current_user, req_object=new_infos)
     
     return create_response_user(updated_user)
+
 
 @router.delete('/users/{id}', response_model=UserResponseSchema)
 def remove(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session), id=id):
