@@ -1,8 +1,8 @@
 import os
 import jwt
 from typing import Union, Any
-from sqlalchemy.orm.session import Session
 from fastapi import HTTPException, Security
+from uuid import UUID
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
@@ -24,6 +24,9 @@ class AuthHandler():
             time_expiration = datetime.utcnow() + expires_delta
         else:
             time_expiration = datetime.utcnow() + timedelta(days=0, minutes=30)
+        
+        if type(subject) == UUID:            
+            subject = str(subject)
 
         payload = {
             'exp': time_expiration,
@@ -35,7 +38,7 @@ class AuthHandler():
             payload,
             self.secret,
             algorithm='HS256'
-        )
+        )        
     
     def decode_token(self, token):
         try:            

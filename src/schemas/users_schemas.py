@@ -1,42 +1,53 @@
 from typing import Optional
+from uuid import UUID
+from sqlalchemy.sql.sqltypes import Enum
 from pydantic import BaseModel, Field
 
+class UsersEntities(str, Enum):
+    administrator= "administrator"
+    professor= "professor"
+    student= "student"
+
+class StatusOptions(str, Enum):
+    active = "active"
+    deactivated = "deactivated"
+
 class UserBaseSchema(BaseModel):
-    email:      Optional[str] = Field(example="foo_bar@email.com")
-    username:   Optional[str] = Field(example="foo.bar")
-    first_name: Optional[str] = Field(example="Foo")
-    last_name:  Optional[str] = Field(example="Bar")    
-    gender:     Optional[str] = Field(example="Male", default=None)
-    entity:     Optional[str] = Field(example="student")
+    email:      Optional[str]           = Field(example="foo_bar@email.com")
+    username:   Optional[str]           = Field(example="foo.bar")
+    first_name: Optional[str]           = Field(example="Foo")
+    last_name:  Optional[str]           = Field(example="Bar")    
+    gender:     Optional[str]           = Field(example="Male", default=None)
+    entity:     Optional[UsersEntities] = Field(example="student")
 
 class UserUpdateSchema(UserBaseSchema):
-    password:   Optional[str] = Field(..., example="Str0ngP@ssw0rd")
-    status:     Optional[str] = Field(..., example="active") 
+    password:   Optional[str]           = Field(..., example="Str0ngP@ssw0rd")
+    status:     Optional[StatusOptions] = Field(..., example="active") 
 
 class UserResponseSchema(UserBaseSchema):
-    id:         str           = Field(..., example="Str0ngP@ssw0rd")
-    email:      str           = Field(..., example="foo_bar@email.com")
-    username:   str           = Field(..., example="foo.bar")
-    first_name: str           = Field(..., example="Foo")
-    last_name:  str           = Field(..., example="Bar")
+    id:         UUID                    = Field(..., example="Str0ngP@ssw0rd")
+    email:      str                     = Field(..., example="foo_bar@email.com")
+    username:   str                     = Field(..., example="foo.bar")
+    first_name: str                     = Field(..., example="Foo")
+    last_name:  str                     = Field(..., example="Bar")
 
 class ListUsersRequestSchema(BaseModel):
-    skip:       Optional[int] = Field(example=0)
-    limit:      Optional[int] = Field(example=100)       
+    skip:       Optional[int]           = Field(example=0)
+    limit:      Optional[int]           = Field(example=100)       
 
 class UserRequestSchema(UserBaseSchema):
-    email:      str           = Field(..., example="foo_bar@email.com")
-    username:   str           = Field(..., example="foo.bar")
-    password:   str           = Field(..., example="Str0ngP@ssw0rd")
-    first_name: str           = Field(..., example="Foo") 
-    last_name:  str           = Field(..., example="Bar")
-    entity:     str           = Field(..., example="student")   
+    email:      str                     = Field(..., example="foo_bar@email.com")
+    username:   str                     = Field(..., example="foo.bar")
+    password:   str                     = Field(..., example="Str0ngP@ssw0rd")
+    first_name: str                     = Field(..., example="Foo") 
+    last_name:  str                     = Field(..., example="Bar")
+    entity:     UsersEntities           = Field(..., example="student")   
 
 class UserSchema(UserRequestSchema):
-    id:         str           = Field(..., example="Str0ngP@ssw0rd")
-    status:     str           = Field(..., example="active")  
-    created_at: str           = Field(..., example="")
-    updated_at: Optional[str] = Field(example="")
+    id:         UUID                    = Field(..., example="Str0ngP@ssw0rd")
+    status:     str                     = Field(..., example="active")  
+    created_at: str                     = Field(..., example="")
+    updated_at: Optional[str]           = Field(example="")
 
     class Config:
         orm_mode = True
