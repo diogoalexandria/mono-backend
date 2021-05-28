@@ -1,4 +1,5 @@
 from typing import Generic, TypeVar, Type, Optional, List, Union, Dict, Any
+from datetime import datetime
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from fastapi.encoders import jsonable_encoder
@@ -43,7 +44,9 @@ class BaseRepository(Generic[ModelType, RequestSchemaType, UpdateRequestSchemaTy
         for field in json_object:                                  # Para cada campo no objeto iterável
             if field in incoming_object:                           # Se o campo também existe no objeto vindo com a novas infos
                 setattr(db_object, field, incoming_object[field])  # Atualiza o objeto do banco com o valor do objeto da requisição
-
+            if field == "updated_at":
+                setattr(db_object, field, datetime.utcnow())
+                
         db.add(db_object)
         db.commit()
         db.refresh(db_object)       

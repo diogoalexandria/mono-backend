@@ -3,13 +3,13 @@ from typing import Optional, List, Union, Dict, Any
 from datetime import datetime
 from sqlalchemy.orm import Session 
 from src.helpers.auth import Auth
-from src.models.user_model import UserModel
+from src.models.users_model import UsersModel
 from src.schemas.users_schemas import UserRequestSchema, UserUpdateSchema, StatusOptions
 from src.repositories.base_repository import BaseRepository
 
-class UserRepository(BaseRepository[UserModel, UserRequestSchema, UserUpdateSchema]):
-    def create(self, db: Session, *, req_object: UserRequestSchema) -> UserModel:
-        db_object = UserModel(
+class UsersRepository(BaseRepository[UsersModel, UserRequestSchema, UserUpdateSchema]):
+    def create(self, db: Session, *, req_object: UserRequestSchema) -> UsersModel:
+        db_object = UsersModel(
             id=uuid.uuid4(),
             email=req_object.email,
             username=req_object.username,
@@ -28,22 +28,22 @@ class UserRepository(BaseRepository[UserModel, UserRequestSchema, UserUpdateSche
 
         return db_object
 
-    def get_by_email(self, db: Session, *, email: str) -> Optional[UserModel]:
-        return db.query(UserModel).filter(UserModel.email == email).first()
+    def get_by_email(self, db: Session, *, email: str) -> Optional[UsersModel]:
+        return db.query(UsersModel).filter(UsersModel.email == email).first()
         
-    def get_by_username(self, db: Session, *, username: str) -> Optional[UserModel]:
-        return db.query(UserModel).filter(UserModel.username == username).first()
+    def get_by_username(self, db: Session, *, username: str) -> Optional[UsersModel]:
+        return db.query(UsersModel).filter(UsersModel.username == username).first()
 
-    def get_by_id(self, db: Session, *, id: str) -> Optional[UserModel]:
+    def get_by_id(self, db: Session, *, id: str) -> Optional[UsersModel]:
         return super().get_by_id(db, id=id)
 
-    def get_all(self, db: Session, *, skip: int, limit: int) -> List[UserModel]:
+    def get_all(self, db: Session, *, skip: int, limit: int) -> List[UsersModel]:
         return super().get_all(db, skip=skip, limit=limit)
 
-    def update(self, db: Session, *, db_object: UserModel, req_object: Union[UserUpdateSchema,  Dict[str, Any]]):
+    def update(self, db: Session, *, db_object: UsersModel, req_object: Union[UserUpdateSchema,  Dict[str, Any]]):
         return super().update(db, db_object=db_object, req_object=req_object)
 
-    def remove(self, db: Session, *, id: int) -> UserModel:
+    def remove(self, db: Session, *, id: int) -> UsersModel:
         return super().remove(db, id=id)       
           
-UserRepository = UserRepository(UserModel)
+UsersRepository = UsersRepository(UsersModel)

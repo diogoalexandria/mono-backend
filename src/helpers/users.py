@@ -1,15 +1,15 @@
 from uuid import UUID
 from typing import Union, Any
 from sqlalchemy.orm.session import Session
-from src.models.user_model import UserModel
-from src.repositories.user_repository import UserRepository
+from src.models.users_model import UsersModel
+from src.repositories.users_repository import UsersRepository
 from src.schemas.users_schemas import UsersEntities, StatusOptions, UserResponseSchema, UserSchema
 
-def is_active(user: UserModel) -> bool:
+def is_active(user: UsersModel) -> bool:
     return user.status == StatusOptions.active
 
 def is_admin(db: Session, *, id: str) -> bool:
-    user = UserRepository.get_by_id(db, id=id)    
+    user = UsersRepository.get_by_id(db, id=id)    
     return user.entity == UsersEntities.administrator
 
 def is_current_user(income_id: str, action_id: UUID) -> bool:

@@ -1,8 +1,8 @@
 import os
 import jwt
+from uuid import UUID
 from typing import Union, Any
 from fastapi import HTTPException, Security
-from uuid import UUID
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
