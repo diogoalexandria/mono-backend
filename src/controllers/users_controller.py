@@ -12,7 +12,7 @@ from src.services.users_service import UsersService
 router = APIRouter()
 
 @router.post('/users', response_model=UserResponseSchema, status_code=201)
-def create(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session), new_user: UserRequestSchema) -> Any:        
+def create( income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session), new_user: UserRequestSchema ) -> Any:        
     if not is_admin(db, id=income_id):
         raise HTTPException( status_code=401, detail="Sem permissão para realizar essa ação." )
 
@@ -25,7 +25,7 @@ def create(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session)
 
 
 @router.get('/users', response_model=List[UserResponseSchema])
-def list_users(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session),  config: ListUsersRequestSchema) -> Any:    
+def list_users( income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session),  config: ListUsersRequestSchema ) -> Any:    
     skip, limit = dict(config).values() # Desestruturando (Unpacking) os valores do Request Body config
     users = UsersRepository.get_all(db, skip=skip, limit=limit)
     
@@ -37,7 +37,7 @@ def list_users(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_sess
 
 
 @router.get('/users/{id}', response_model=UserResponseSchema)
-def list_user(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session), id=id) -> Any:
+def list_user( income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:
 
     user = UsersService.validate_id(db, id=id)
 
@@ -51,11 +51,11 @@ def update(
     *,
     db: Session = Depends(db_session),
     new_infos: Union[UserUpdateSchema,  Dict[str, Any]],
-    id=id 
+    id: str = id 
     
 ) -> Any:
     
-    if not is_admin(db, id=income_id) and not is_current_user(income_id=income_id, action_id=id):
+    if not is_admin( db, id=income_id) and not is_current_user(income_id=income_id, action_id=id ):
         raise HTTPException( status_code=401, detail="Sem permissão para realizar essa ação." )
 
     current_user = UsersService.validate_id(db, id=id)
@@ -76,7 +76,7 @@ def update(
 
 
 @router.delete('/users/{id}', response_model=UserResponseSchema)
-def remove(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session), id=id):
+def remove( income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ):
     if not is_admin(db, id=income_id):
         raise HTTPException( status_code=401, detail="Sem permissão para realizar essa ação." )
     

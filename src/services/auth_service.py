@@ -6,15 +6,15 @@ from src.helpers.auth import Auth
 from src.helpers.users import is_active
 
 class AuthService():
-    def validate_access(self, user: Union[UsersModel, None], password: str):
+    def validate_access( self, user: Union[UsersModel, None], password: str ):
         if not user:
-            raise HTTPException(status_code=400, detail="Usuário inexistente.")
+            raise HTTPException( status_code=400, detail="Usuário inexistente." )
         if not Auth.verify_password(password, user.password):
-            raise HTTPException(status_code=400, detail="Senha incorreta.")
+            raise HTTPException( status_code=400, detail="Senha incorreta." )
         if not is_active(user):
-            raise HTTPException(status_code=400, detail="Usuário desativado.")
+            raise HTTPException( status_code=400, detail="Usuário desativado." )
 
     def get_token(self, payload: Union[UUID, str]):
-        return Auth.encode_token(payload)
+        return Auth.encode_token( payload )
 
 AuthService = AuthService()

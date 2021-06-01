@@ -8,13 +8,13 @@ from src.services.users_service import UsersService
 
 router = APIRouter()
 
-@router.post('/auth', response_model=TokenResponseSchema)
-def login(payload: AuthRequestSchema, *, db: Session = Depends(db_session)) -> Any:    
+@router.post( '/auth', response_model=TokenResponseSchema )
+def login( payload: AuthRequestSchema, *, db: Session = Depends(db_session) ) -> Any:    
     identity, password = dict(payload).values() # Desestruturando (Unpacking) os valores do Request Body payload    
     
-    user = UsersService.get_user(db, identity=identity)   
-    AuthService.validate_access(user, password)
-    token = AuthService.get_token(user.id)    
+    user = UsersService.get_user( db, identity=identity )   
+    AuthService.validate_access( user, password )
+    token = AuthService.get_token( user.id )    
     
     return {
         'token': token
