@@ -1,14 +1,13 @@
 from typing import Any, List, Union, Dict, Any
-from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
-from src.config import DATABASE_URL
 from sqlalchemy.orm import Session
 from src.helpers.auth import Auth
 from src.helpers.users import is_admin, is_current_user, create_response_user
 from src.database.session import db_session
-from src.schemas.users_schemas import StatusOptions, UserResponseSchema, UserRequestSchema, ListUsersRequestSchema, UserUpdateSchema
-from src.repositories.users_repository import UsersRepository
+from src.schemas.list_schema import ListRequestSchema
+from src.schemas.users_schemas import StatusOptions, UserResponseSchema, UserRequestSchema, UserUpdateSchema
 from src.services.users_service import UsersService
+from src.repositories.users_repository import UsersRepository
 
 router = APIRouter()
 
@@ -26,7 +25,7 @@ def create( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_sessi
 
 
 @router.get('/users', response_model=List[UserResponseSchema])
-def list_users( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session),  config: ListUsersRequestSchema ) -> Any:    
+def list_users( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session),  config: ListRequestSchema ) -> Any:    
     skip, limit = dict(config).values() # Desestruturando (Unpacking) os valores do Request Body config
     users = UsersRepository.get_all(db, skip=skip, limit=limit)
     

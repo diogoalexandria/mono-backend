@@ -25,15 +25,13 @@ class UserUpdateSchema(UserBaseSchema):
     status:     Optional[StatusOptions] = Field(..., example="active") 
 
 class UserResponseSchema(UserBaseSchema):
-    id:         UUID                    = Field(..., example="Str0ngP@ssw0rd")
+    id:         UUID                    = Field(..., example="123e4567-e89b-12d3-a456-426614174000")
     email:      str                     = Field(..., example="foo_bar@email.com")
     username:   str                     = Field(..., example="foo.bar")
     first_name: str                     = Field(..., example="Foo")
     last_name:  str                     = Field(..., example="Bar")
 
-class ListUsersRequestSchema(BaseModel):
-    skip:       Optional[int]           = Field(example=0)
-    limit:      Optional[int]           = Field(example=100)       
+       
 
 class UserRequestSchema(UserBaseSchema):
     email:      str                     = Field(..., example="foo_bar@email.com")
@@ -44,10 +42,10 @@ class UserRequestSchema(UserBaseSchema):
     entity:     UsersEntities           = Field(..., example="student")   
 
 class UserSchema(UserRequestSchema):
-    id:         UUID                    = Field(..., example="Str0ngP@ssw0rd")
+    id:         UUID                    = Field(..., example="123e4567-e89b-12d3-a456-426614174000")
     status:     str                     = Field(..., example="active")  
-    created_at: str                     = Field(..., example="")
-    updated_at: Optional[str]           = Field(example="")
+    created_at: str                     = Field(..., example="2025-12-19 09:26:03.478039")
+    updated_at: Optional[str]           = Field(example="2025-12-19 09:26:03.478039")
 
     class Config:
         orm_mode = True
