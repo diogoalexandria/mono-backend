@@ -1,18 +1,19 @@
 from typing import Any, List, Union, Dict, Any
+from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from src.config import DATABASE_URL
 from sqlalchemy.orm import Session
 from src.helpers.auth import Auth
 from src.helpers.users import is_admin, is_current_user, create_response_user
 from src.database.session import db_session
-from src.schemas.users_schemas import UserResponseSchema, UserRequestSchema, ListUsersRequestSchema, UserUpdateSchema
+from src.schemas.users_schemas import StatusOptions, UserResponseSchema, UserRequestSchema, ListUsersRequestSchema, UserUpdateSchema
 from src.repositories.users_repository import UsersRepository
 from src.services.users_service import UsersService
 
 router = APIRouter()
 
 @router.post('/users', response_model=UserResponseSchema, status_code=201)
-def create( income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session), new_user: UserRequestSchema ) -> Any:        
+def create( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), new_user: UserRequestSchema ) -> Any:        
     if not is_admin(db, id=income_id):
         raise HTTPException( status_code=401, detail="Sem permissão para realizar essa ação." )
 
@@ -25,7 +26,7 @@ def create( income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session
 
 
 @router.get('/users', response_model=List[UserResponseSchema])
-def list_users( income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session),  config: ListUsersRequestSchema ) -> Any:    
+def list_users( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session),  config: ListUsersRequestSchema ) -> Any:    
     skip, limit = dict(config).values() # Desestruturando (Unpacking) os valores do Request Body config
     users = UsersRepository.get_all(db, skip=skip, limit=limit)
     
@@ -37,7 +38,7 @@ def list_users( income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_ses
 
 
 @router.get('/users/{id}', response_model=UserResponseSchema)
-def list_user( income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:
+def list_user( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:
 
     user = UsersService.validate_id(db, id=id)
 
@@ -50,12 +51,12 @@ def update(
     income_id=Depends(Auth.wrapper),
     *,
     db: Session = Depends(db_session),
-    new_infos: Union[UserUpdateSchema,  Dict[str, Any]],
+    new_infos: Union[UserUpdateSchema,  Dict[str, Union[str, StatusOptions]]],
     id: str = id 
     
 ) -> Any:
     
-    if not is_admin( db, id=income_id) and not is_current_user(income_id=income_id, action_id=id ):
+    if not is_admin( db, id = income_id) and not is_current_user(income_id=income_id, action_id=id ):
         raise HTTPException( status_code=401, detail="Sem permissão para realizar essa ação." )
 
     current_user = UsersService.validate_id(db, id=id)
@@ -76,7 +77,7 @@ def update(
 
 
 @router.delete('/users/{id}', response_model=UserResponseSchema)
-def remove( income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ):
+def remove( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ):
     if not is_admin(db, id=income_id):
         raise HTTPException( status_code=401, detail="Sem permissão para realizar essa ação." )
     
