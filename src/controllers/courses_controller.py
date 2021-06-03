@@ -11,7 +11,7 @@ from src.services.courses_service import CoursesService
 router = APIRouter()
 
 @router.post('/courses', response_model=CourseResponseSchema, status_code=201)
-def create( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), new_course: CourseBaseSchema ) -> Any:
+def create_course( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), new_course: CourseBaseSchema ) -> Any:
     AuthService.validate_admin_access(db, id=income_id)
     
     created_course = CoursesService.create_course(db, object=new_course)
@@ -34,7 +34,7 @@ def list_course( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_
     
 
 @router.patch('/courses/{id}', response_model=CourseResponseSchema, status_code=202)
-def update(
+def update_course(
 
     income_id=Depends(Auth.wrapper),
     *,
@@ -52,7 +52,7 @@ def update(
 
 
 @router.delete('/courses/{id}', response_model=CourseResponseSchema)
-def remove( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ):
+def remove_course( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ):
     AuthService.validate_admin_access(db, id=income_id)
 
     removed_course = CoursesService.remove_course()

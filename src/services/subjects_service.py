@@ -10,7 +10,7 @@ from src.repositories.subjects_repository import SubjectsRepository
 
 class SubjectsService():
     def create_subject( self, db: Session, *, object: SubjectBaseSchema ):
-       subject = subjectsRepository.create(db, req_object=object)
+       subject = SubjectsRepository.create(db, req_object=object)
 
        return response_subject(subject)
 

@@ -1,4 +1,3 @@
-from src.services.subjects_service import SubjectsService
 from typing import Any, Dict, List, Union
 from fastapi import APIRouter, Depends
 from src.helpers.auth import Auth
@@ -7,34 +6,35 @@ from sqlalchemy.orm.session import Session
 from src.schemas.list_schema import ListRequestSchema
 from src.services.auth_service import AuthService
 from src.schemas.subjects_schemas import SubjectBaseSchema, SubjectResponseSchema
+from src.services.subjects_service import SubjectsService
 
 router = APIRouter()
 
 @router.post('/subjects', response_model=SubjectResponseSchema, status_code=201)
-def create( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), new_course: SubjectBaseSchema ) -> Any:
+def create_subject( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), new_subject: SubjectBaseSchema ) -> Any:
     AuthService.validate_admin_access(db, id=income_id)
     
-    created_course = SubjectsService.create_course(db, object=new_course)
+    created_subject = SubjectsService.create_subject(db, object=new_subject)
     
-    return created_course
+    return created_subject
 
 
 @router.get('/subjects', response_model=List[SubjectResponseSchema])
-def list_courses( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session),  config: ListRequestSchema ) -> Any:
-    courses_list = SubjectsService.create_courses_list()
+def list_subjects( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session),  config: ListRequestSchema ) -> Any:
+    subjects_list = SubjectsService.create_subjects_list()
 
-    return courses_list
+    return subjects_list
 
 
 @router.get('/subjects/{id}', response_model=SubjectResponseSchema)
-def list_course( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:
-    course = SubjectsService.validate_id(db, id=id)
+def list_subject( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:
+    subject = SubjectsService.validate_id(db, id=id)
     
-    return course
+    return subject
     
 
 @router.patch('/subjects/{id}', response_model=SubjectResponseSchema, status_code=202)
-def update(
+def update_subject(
 
     income_id=Depends(Auth.wrapper),
     *,
@@ -45,16 +45,16 @@ def update(
 ) -> Any:
     AuthService.validate_admin_access(db, id=income_id)
     
-    current_course = SubjectsService.validate_id(db, id=id)
-    updated_course = SubjectsService.update_course(db, db_object=current_course, infos_object=new_infos)
+    current_subject = SubjectsService.validate_id(db, id=id)
+    updated_subject = SubjectsService.update_subject(db, db_object=current_subject, infos_object=new_infos)
     
-    return updated_course
+    return updated_subject
 
 
 @router.delete('/subjects/{id}', response_model=SubjectResponseSchema)
-def remove( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ):
+def remove_subject( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ):
     AuthService.validate_admin_access(db, id=income_id)
 
-    removed_course = SubjectsService.remove_course()
+    removed_subject = SubjectsService.remove_subject()
 
-    return removed_course
+    return removed_subject
