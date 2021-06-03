@@ -15,7 +15,7 @@ def is_admin(db: Session, *, id: str) -> bool:
 def is_current_user(income_id: str, action_id: UUID) -> bool:
     return income_id == str(action_id)
 
-def create_response_user(user: Union[UserSchema, Any]) -> UserResponseSchema:    
+def response_user(user: Union[UserSchema, Any]) -> UserResponseSchema:    
     return UserResponseSchema(
         id=user.id,
         email=user.email,

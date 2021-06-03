@@ -19,23 +19,13 @@ depends_on = None
 
 def upgrade():
     op.create_table(
-        'users',
+        'courses',
         sa.Column('id',         UUID(as_uuid=True)  , nullable=False, index=True, primary_key=True),
-        sa.Column('email',      sa.String           , nullable=False, index=True, unique=True),
-        sa.Column('username',   sa.String           , nullable=False, index=True, unique=True),
-        sa.Column('password',   sa.String           , nullable=False),
-        sa.Column('first_name', sa.String           , nullable=False),
-        sa.Column('last_name',  sa.String           , nullable=False),
-        sa.Column('entity',     sa.String           , nullable=False),
-        sa.Column('gender',     sa.String           , nullable=True),
-        sa.Column('status',     sa.String           , nullable=False),
-        sa.Column('course_id',  sa.String           , nullable=True),
+        sa.Column('name',       sa.String           , nullable=False, index=True, unique=True),       
         sa.Column('created_at', sa.DateTime         , nullable=False),
         sa.Column('updated_at', sa.DateTime         , nullable=True)
     )
-    pass
-
 
 def downgrade():
-    op.drop_table('users')
-    pass
+    op.drop_table('courses')
+    

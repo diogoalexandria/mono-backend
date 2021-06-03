@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, DateTime
+from sqlalchemy.orm import relationship
 from src.database.base_class import Base
 
 class CoursesModel(Base):
@@ -8,3 +9,4 @@ class CoursesModel(Base):
     name       = Column(String   , nullable=False, index=True, unique=True)
     created_at = Column(DateTime , nullable=False)
     updated_at = Column(DateTime , nullable=True)
+    user = relationship("UsersModel")

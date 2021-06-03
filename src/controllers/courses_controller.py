@@ -10,13 +10,14 @@ router = APIRouter()
 
 @router.post('/courses', response_model=CourseResponseSchema, status_code=201)
 def create( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), new_user: CourseBaseSchema ) -> Any:
+    
     pass
 
-@router.get('/users', response_model=List[CourseResponseSchema])
+@router.get('/courses', response_model=List[CourseResponseSchema])
 def list_courses( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session),  config: ListRequestSchema ) -> Any:
     pass
 
-@router.get('/users/{id}', response_model=CourseResponseSchema)
+@router.get('/courses/{id}', response_model=CourseResponseSchema)
 def list_course( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:
     pass
 

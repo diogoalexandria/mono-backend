@@ -1,5 +1,6 @@
-from sqlalchemy import Column, String, DateTime
+from sqlalchemy import Column, String, DateTime, ForeignKey
 from src.database.base_class import Base
+from src.models.courses_model import CoursesModel
 
 class UsersModel(Base):
     __tablename__   = "users"
@@ -13,6 +14,6 @@ class UsersModel(Base):
     entity          = Column(String   , nullable=False)
     gender          = Column(String   , nullable=True)
     status          = Column(String   , nullable=False, default="active")
-    course_id       = Column(String   , nullable=True)
+    course_id       = Column(String   , ForeignKey('courses.id'), nullable=True)
     created_at      = Column(DateTime , nullable=False)
     updated_at      = Column(DateTime , nullable=True)
