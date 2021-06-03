@@ -21,7 +21,8 @@ def upgrade():
     op.create_table(
         'courses',
         sa.Column('id',         UUID(as_uuid=True)  , nullable=False, index=True, primary_key=True),
-        sa.Column('name',       sa.String           , nullable=False, index=True, unique=True),       
+        sa.Column('name',       sa.String           , nullable=False, index=True, unique=True),
+        sa.Column('status',     sa.String           , nullable=False),       
         sa.Column('created_at', sa.DateTime         , nullable=False),
         sa.Column('updated_at', sa.DateTime         , nullable=True)
     )

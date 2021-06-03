@@ -1,6 +1,6 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 from sqlalchemy.orm.session import Session
-from src.schemas.courses_schema import CourseBaseSchema
+from src.schemas.courses_schemas import CourseBaseSchema
 from src.repositories.base_repository import BaseRepository
 from src.models.courses_model import CoursesModel
 

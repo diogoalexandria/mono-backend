@@ -12,7 +12,7 @@ from src.schemas.users_schemas import StatusOptions, UserRequestSchema, UserUpda
 from src.repositories.users_repository import UsersRepository
 
 class UsersService():
-    def get_user( self, db: Session, *,identity: Union[str, UUID] ) -> UsersModel:        
+    def get_user( self, db: Session, *, identity: Union[str, UUID] ) -> UsersModel:        
         if is_email(identity):
             user = UsersRepository.get_by_email( db, email=identity )
         elif is_UUID(identity):

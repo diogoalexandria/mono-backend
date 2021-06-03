@@ -2,16 +2,13 @@ from uuid import UUID
 from typing import Optional
 from pydantic import BaseModel, Field
 from sqlalchemy.sql.sqltypes import Enum
+from src.schemas.status_schema import StatusOptions
 
 class UsersEntities(str, Enum):
     administrator= "administrator"
     professor= "professor"
     student= "student"
-
-class StatusOptions(str, Enum):
-    active = "active"
-    deactivated = "deactivated"
-
+    
 class UserBaseSchema(BaseModel):
     email:      Optional[str]           = Field(example="foo_bar@email.com")
     username:   Optional[str]           = Field(example="foo.bar")
@@ -29,9 +26,7 @@ class UserResponseSchema(UserBaseSchema):
     email:      str                     = Field(..., example="foo_bar@email.com")
     username:   str                     = Field(..., example="foo.bar")
     first_name: str                     = Field(..., example="Foo")
-    last_name:  str                     = Field(..., example="Bar")
-
-       
+    last_name:  str                     = Field(..., example="Bar")       
 
 class UserRequestSchema(UserBaseSchema):
     email:      str                     = Field(..., example="foo_bar@email.com")
