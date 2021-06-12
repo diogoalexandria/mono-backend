@@ -33,7 +33,7 @@ class UsersRepository( BaseRepository[UsersModel, UserRequestSchema, UserUpdateS
     def get_by_email( self, db: Session, *, email: str ) -> Optional[UsersModel]:
         return db.query( UsersModel ).filter( UsersModel.email == email ).first()
         
-    def get_by_username( self, db: Session, *, username: str ) -> Optional[UsersModel]:
+    def get_by_username( self, db: Session, *, username: str ) -> Optional[UsersModel]:        
         return db.query( UsersModel ).filter( UsersModel.username == username ).first()
 
     def get_by_id( self, db: Session, *, id: str) -> Optional[UsersModel]:

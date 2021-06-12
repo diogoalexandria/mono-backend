@@ -19,11 +19,9 @@ class CoursesService():
         skip, limit = dict(config).values() # Desestruturando (Unpacking) os valores do Request Body config
         courses = CoursesRepository.get_all(db, skip=skip, limit=limit)
         
-        response_course = []
-        for course in courses:
-            response_course.append(response_course(course))
+        response_courses = [response_course(course) for course in courses]
         
-        return response_course
+        return response_courses
 
 
     def validate_id( self, db: Session, *, id: str = id ) -> CoursesModel:

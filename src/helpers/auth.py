@@ -1,4 +1,5 @@
 import os
+from src.schemas.auth_schemas import TokenTypes
 import jwt
 from uuid import UUID
 from typing import Union, Any
@@ -12,6 +13,7 @@ class AuthHandler():
     security = HTTPBearer()
     password_context = CryptContext( schemes=["bcrypt"], deprecated="auto" )
     secret = os.environ['SECRET']
+    refresh_secret = os.environ['REFRESH_SECRET']
 
     def hash_password( self, password: str ):
         return self.password_context.hash(password)
@@ -19,26 +21,33 @@ class AuthHandler():
     def verify_password( self, plain_password: str, hashed_password: str ):
         return self.password_context.verify(plain_password, hashed_password)
     
-    def encode_token( self, subject: Union[str, Any] , expires_delta: timedelta = None ):
+    def encode_token( self, type: TokenTypes, subject: Union[str, Any] , expires_delta: timedelta = None ):
+
         if expires_delta:
             time_expiration = datetime.utcnow() + expires_delta
         else:
-            time_expiration = datetime.utcnow() + timedelta(days=0, minutes=30)
+            time_expiration = datetime.utcnow() + timedelta(days=0, minutes=30)        
         
-        if type(subject) == UUID:            
+        if isinstance(subject, UUID):
+            print("Entrei")            
             subject = str(subject)
 
-        payload = {
-            'exp': time_expiration,
+        payload = {            
             'iat': datetime.utcnow(),
             'sub': subject
         }
+
+        if type == 'refresh':
+            secret = self.refresh_secret
+        else:
+            secret = self.secret
+            payload['exp'] = time_expiration
         
         return jwt.encode(
 
             payload,
-            self.secret,
-            algorithm='HS256'
+            secret,
+            algorithm ='HS256'
 
         )        
     

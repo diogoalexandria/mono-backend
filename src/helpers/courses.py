@@ -1,7 +1,8 @@
 from typing import Any, Union
-from src.schemas.courses_schemas import CourseBaseSchema, CourseSchema
+from src.schemas.courses_schemas import CourseResponseSchema, CourseSchema
 
-def response_course(course: Union[CourseSchema, Any]) -> CourseBaseSchema:    
-    return CourseBaseSchema(
+def response_course(course: Union[CourseSchema, Any]) -> CourseResponseSchema:    
+    return CourseResponseSchema(
+        id=course.id,
         name=course.name        
     )

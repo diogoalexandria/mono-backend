@@ -1,7 +1,8 @@
 from fastapi import FastAPI
-#from starlette.middleware.cors import CORSMiddleware
-#from database import database
 from src.routes import routes
+from src.config import Settings
+from starlette.middleware import Middleware
+from starlette.middleware.cors import CORSMiddleware
 
 app = FastAPI(
 
@@ -14,12 +15,24 @@ app = FastAPI(
 
 )
 
-#@app.on_event("startup")
-#async def startup():
-#    await database.connect()
+# origins = [
+#     "http://localhost:5000",
+# ]
 
-#app.on_event("shutdown")
-#async def shutdown():
-#    await database.disconnect()
+# middleware = [
+#     Middleware(CORSMiddleware, allow_origins=origins)
+# ]
+
+# app = FastAPI(middleware=middleware)
+
+if Settings.BACKEND_CORS_ORIGINS:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[str(origin) for origin in Settings.BACKEND_CORS_ORIGINS],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
 
 app.include_router( routes.router, prefix="/api" )

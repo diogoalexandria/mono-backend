@@ -19,11 +19,9 @@ class SubjectsService():
         skip, limit = dict(config).values() # Desestruturando (Unpacking) os valores do Request Body config
         subjects = SubjectsRepository.get_all(db, skip=skip, limit=limit)
         
-        response_subject = []
-        for subject in subjects:
-            response_subject.append(response_subject(subject))
+        response_subjects = [response_subject(subject) for subject in subjects]
         
-        return response_subject
+        return response_subjects
 
 
     def validate_id( self, db: Session, *, id: str = id ) -> SubjectsModel:

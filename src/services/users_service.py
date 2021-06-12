@@ -18,9 +18,9 @@ class UsersService():
         elif is_UUID(identity):
             user = UsersRepository.get_by_id( db, id=identity )
         else:
-            user = UsersRepository.get_by_username( db, username=identity )
+            user = UsersRepository.get_by_username( db, username=identity )           
 
-        return response_user(user)   
+        return user   
 
 
     def validate_email( self, db: Session, *, email: str ):
@@ -55,10 +55,8 @@ class UsersService():
     def create_users_list( self, db: Session, *, config: ListRequestSchema):
         skip, limit = dict(config).values() # Desestruturando (Unpacking) os valores do Request Body config
         users = UsersRepository.get_all(db, skip=skip, limit=limit)
-        
-        response_users = []
-        for user in users:
-            response_users.append(response_user(user))
+                
+        response_users = [response_user(user) for user in users]        
         
         return response_users
 
