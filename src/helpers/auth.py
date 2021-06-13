@@ -28,8 +28,7 @@ class AuthHandler():
         else:
             time_expiration = datetime.utcnow() + timedelta(days=0, minutes=30)        
         
-        if isinstance(subject, UUID):
-            print("Entrei")            
+        if isinstance(subject, UUID):                        
             subject = str(subject)
 
         payload = {            
