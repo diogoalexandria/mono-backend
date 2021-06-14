@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from sqlalchemy.sql.sqltypes import Enum, String
+from sqlalchemy.sql.sqltypes import Enum
 
 class TokenTypes(str, Enum):
     token = "token"
@@ -12,3 +12,10 @@ class AuthRequestSchema(BaseModel):
 class AuthSchema(BaseModel):
     token:  str = Field(..., example="t0Kente5T")
     entity: str = Field(...,example="student")
+
+class EntitySchema(BaseModel):    
+    entity: str = Field(...,example="student")
+
+class TokenSchema(BaseModel):
+    token:  str = Field(..., example="t0Kente5T")
+    

@@ -7,8 +7,7 @@ from src.helpers.auth import Auth
 from src.helpers.users import is_active, is_admin, is_current_user
 
 class AuthService():
-    def validate_access( self, user: Union[UsersModel, None], password: str ):       
-
+    def validate_access( self, user: Union[UsersModel, None], password: str ):
         if not user:
             raise HTTPException( status_code=400, detail="Usuário inexistente." )
         if not Auth.verify_password(password, user.password):
@@ -16,11 +15,11 @@ class AuthService():
         if not is_active(user):
             raise HTTPException( status_code=400, detail="Usuário desativado." )
 
-    def get_token( self, payload: Union[UUID, str]):
-        return Auth.encode_token( 'token', payload )
+    def get_token( self, payload: Union[UUID, str] ):
+        return Auth.encode_token( payload )
     
-    def get_refresh_token( self, payload: Union[UUID, str]):
-        return Auth.encode_token( 'refresh', payload )
+    def validate_token( self, token: str ):
+        return Auth.decode_token( token )    
 
     def validate_admin_access( self, db: Session, *, id: str ):
         if not is_admin(db, id=id):

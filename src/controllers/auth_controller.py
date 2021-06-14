@@ -2,7 +2,7 @@ from typing import Any
 from fastapi import APIRouter, Depends
 from src.database.session import db_session
 from sqlalchemy.orm.session import Session
-from src.schemas.auth_schemas import AuthRequestSchema, AuthSchema
+from src.schemas.auth_schemas import AuthRequestSchema, AuthSchema, EntitySchema, TokenSchema
 from src.services.auth_service import AuthService
 from src.services.users_service import UsersService
 
@@ -15,9 +15,17 @@ def login( payload: AuthRequestSchema, *, db: Session = Depends(db_session) ) ->
     user = UsersService.get_user( db, identity=identity )           
     AuthService.validate_access( user, password )
     token = AuthService.get_token( user.id )    
-    # refresh_token = AuthService.get_refresh_token( user.id )   
 
     return {
         'token': token,
         'entity': user.entity        
     }
+
+@router.post( '/auth/validate', response_model=EntitySchema )
+def validate_token( payload: TokenSchema, *, db: Session = Depends(db_session) ) -> Any:    
+    user_id = AuthService.validate_token(payload.token)
+    user = UsersService.get_user(db, identity=user_id)
+
+    return {
+        'entity': user.entity
+    }    
