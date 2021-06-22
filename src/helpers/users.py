@@ -19,7 +19,9 @@ def response_user(user: Union[UserSchema, Any]) -> UserResponseSchema:
     return UserResponseSchema(
         id=user.id,
         email=user.email,
+        entity=user.entity,
         username=user.username,
+        status=user.status,
         first_name=user.first_name,
         last_name=user.last_name
     )

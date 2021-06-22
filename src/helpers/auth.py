@@ -48,15 +48,15 @@ class AuthHandler():
         )        
     
     def decode_token( self, token: str ):
-        try:            
-            payload = jwt.decode( token, self.secret, algorithms=['HS256'] )
+        try:                                  
+            payload = jwt.decode( token, self.secret, algorithms=['HS256'] )            
             return payload['sub']
-        except jwt.ExpiredSignatureError:
+        except jwt.ExpiredSignatureError:            
             raise HTTPException( status_code=401, detail='Assinatura do token expirada.' )
-        except jwt.InvalidTokenError as e:
+        except jwt.InvalidTokenError as e:            
             raise HTTPException( status_code=401, detail='Token inválido.' )
     
-    def wrapper( self, auth: HTTPAuthorizationCredentials = Security(security) ):        
+    def wrapper( self, auth: HTTPAuthorizationCredentials = Security(security) ):                                        
         return self.decode_token(auth.credentials)    
 
 Auth = AuthHandler()

@@ -39,8 +39,8 @@ class UsersRepository( BaseRepository[UsersModel, UserRequestSchema, UserUpdateS
     def get_by_id( self, db: Session, *, id: str) -> Optional[UsersModel]:
         return super().get_by_id(db, id=id)
 
-    def get_all( self, db: Session, *, skip: int, limit: int ) -> List[UsersModel]:
-        return super().get_all( db, skip=skip, limit=limit )
+    def get_all( self, db: Session ) -> List[UsersModel]:
+        return super().get_all( db )
 
     def update( self, db: Session, *, db_object: UsersModel, req_object: Union[UserUpdateSchema,  Dict[str, Any]] ):
         return super().update( db, db_object=db_object, req_object=req_object )

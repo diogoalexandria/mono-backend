@@ -34,13 +34,13 @@ class BaseRepository(Generic[ModelType, RequestSchemaType, UpdateRequestSchemaTy
         return db_object
 
     def update(self, db:Session, *, db_object: ModelType, req_object: Union[UpdateRequestSchemaType, Dict[str, Any]]):
+        json_object = jsonable_encoder(db_object)                  # Transformando o objeto do banco em um objeto iterável 
         
-        if isinstance(req_object, dict):                           # Teste se o objeto vindo da requisição é do tipo dict
+        if isinstance(req_object, dict):                                       # Teste se o objeto vindo da requisição é do tipo dict
             incoming_object = req_object
-        else:            
+        else:                        
             incoming_object = req_object.dict(exclude_unset=True)        
         
-        json_object = jsonable_encoder(db_object)                  # Transformando o objeto do banco em um objeto iterável 
         for field in json_object:                                  # Para cada campo no objeto iterável
             if field in incoming_object:                           # Se o campo também existe no objeto vindo com a novas infos
                 setattr(db_object, field, incoming_object[field])  # Atualiza o objeto do banco com o valor do objeto da requisição

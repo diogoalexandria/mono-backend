@@ -18,15 +18,17 @@ class UserBaseSchema(BaseModel):
     entity:     Optional[UsersEntities] = Field(example="student")
 
 class UserUpdateSchema(UserBaseSchema):
-    password:   Optional[str]           = Field(..., example="Str0ngP@ssw0rd")
-    status:     Optional[StatusOptions] = Field(..., example="active") 
+    password:   Optional[str]           = Field( example="Str0ngP@ssw0rd")
+    status:     Optional[StatusOptions] = Field( example="active") 
 
 class UserResponseSchema(UserBaseSchema):
     id:         UUID                    = Field(..., example="123e4567-e89b-12d3-a456-426614174000")
     email:      str                     = Field(..., example="foo_bar@email.com")
+    entity:     UsersEntities           = Field(..., example="student")
     username:   str                     = Field(..., example="foo.bar")
     first_name: str                     = Field(..., example="Foo")
-    last_name:  str                     = Field(..., example="Bar")       
+    last_name:  str                     = Field(..., example="Bar")
+    status:     StatusOptions           = Field(..., example="active")       
 
 class UserRequestSchema(UserBaseSchema):
     email:      str                     = Field(..., example="foo_bar@email.com")

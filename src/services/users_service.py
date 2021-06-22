@@ -8,7 +8,7 @@ from src.helpers.users import response_user
 from src.models.users_model import UsersModel
 from sqlalchemy.orm.session import Session
 from src.schemas.list_schema import ListRequestSchema
-from src.schemas.users_schemas import StatusOptions, UserRequestSchema, UserUpdateSchema
+from src.schemas.users_schemas import StatusOptions, UserRequestSchema, UserResponseSchema, UserUpdateSchema
 from src.repositories.users_repository import UsersRepository
 
 class UsersService():
@@ -38,12 +38,15 @@ class UsersService():
             raise HTTPException( status_code=400, detail="O username já está cadastrado." )
 
 
-    def validate_id( self, db: Session, *, id: str = id ) -> UsersModel:
-        user = UsersRepository.get_by_id( db, id=id )
+    def validate_id( self, db: Session, *, id: str = id ) -> Dict[UsersModel,UserResponseSchema]:
+        user = UsersRepository.get_by_id( db, id=id )        
         if not user:        
             raise HTTPException( status_code=400, detail="Usuário não encontrado." )
 
-        return response_user(user)
+        return {
+            "db_object": user,
+            "response": response_user(user)
+        }
 
 
     def create_user( self, db: Session, *, object: UserRequestSchema ):
@@ -52,9 +55,9 @@ class UsersService():
         return response_user(created_user)
 
 
-    def create_users_list( self, db: Session, *, config: ListRequestSchema):
-        skip, limit = dict(config).values() # Desestruturando (Unpacking) os valores do Request Body config
-        users = UsersRepository.get_all(db, skip=skip, limit=limit)
+    def create_users_list( self, db: Session ):
+         # Desestruturando (Unpacking) os valores do Request Body config
+        users = UsersRepository.get_all(db)
                 
         response_users = [response_user(user) for user in users]        
         
@@ -71,7 +74,7 @@ class UsersService():
 
     ):        
         # Reforçando que o id que chega no Params seja o mesmo que o Request Body
-        infos_object['id'] = id 
+        # infos_object['id'] = id 
         
         if "email" in infos_object:
             UsersService.validate_email(db, email=infos_object.email)
