@@ -25,11 +25,11 @@ class SubjectsService():
 
 
     def validate_id( self, db: Session, *, id: str = id ) -> SubjectsModel:
-        user = SubjectsRepository.get_by_id( db, id=id )
-        if not user:        
-            raise HTTPException( status_code=400, detail="Curso não encontrado." )
+        subject = SubjectsRepository.get_by_id( db, id=id )
+        if not subject:        
+            raise HTTPException( status_code=400, detail="Matéria não encontrado." )
 
-        return response_subject(user)
+        return response_subject(subject)
 
 
     def update_subject(

@@ -14,14 +14,16 @@ router = APIRouter()
 def create_course( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), new_course: CourseBaseSchema ) -> Any:
     AuthService.validate_admin_access(db, id=income_id)
     
+    CoursesService.validate_name(db, name=new_course.name)
+
     created_course = CoursesService.create_course(db, object=new_course)
     
     return created_course
 
 
 @router.get('/courses', response_model=List[CourseResponseSchema])
-def list_courses( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session),  config: ListRequestSchema ) -> Any:
-    courses_list = CoursesService.create_courses_list()
+def list_courses( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session) ) -> Any:
+    courses_list = CoursesService.create_courses_list(db)
 
     return courses_list
 
@@ -30,7 +32,7 @@ def list_courses( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db
 def list_course( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:
     course = CoursesService.validate_id(db, id=id)
     
-    return course
+    return course["response"]
     
 
 @router.patch('/courses/{id}', response_model=CourseResponseSchema, status_code=202)
@@ -46,7 +48,11 @@ def update_course(
     AuthService.validate_admin_access(db, id=income_id)
     
     current_course = CoursesService.validate_id(db, id=id)
-    updated_course = CoursesService.update_course(db, db_object=current_course, infos_object=new_infos)
+    updated_course = CoursesService.update_course(
+        db,
+        db_object=current_course["db_object"],
+        infos_object=new_infos
+    )
     
     return updated_course
 
@@ -55,6 +61,6 @@ def update_course(
 def remove_course( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ):
     AuthService.validate_admin_access(db, id=income_id)
 
-    removed_course = CoursesService.remove_course()
+    removed_course = CoursesService.remove_course(db, id=id)
 
     return removed_course

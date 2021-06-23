@@ -55,15 +55,17 @@ def update_user(
 
     current_user = UsersService.validate_id(db, id=id)    
     updated_user = UsersService.update_user(
-        db, db_object=current_user["db_object"], infos_object=new_infos)
+        db,
+        db_object=current_user["db_object"],
+        infos_object=new_infos
+    )
 
     return updated_user
 
 
 @router.delete('/users/{id}', response_model=UserResponseSchema)
 def remove_user(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id):
-    AuthService.validate_admin_access(db, id=income_id)
-
+    AuthService.validate_admin_access(db, id=income_id)    
     removed_user = UsersService.remove_user(db, id=id)
 
     return removed_user
