@@ -67,5 +67,4 @@ def update_user(
 def remove_user(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id):
     AuthService.validate_admin_access(db, id=income_id)    
     removed_user = UsersService.remove_user(db, id=id)
-
     return removed_user

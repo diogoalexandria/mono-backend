@@ -59,6 +59,6 @@ def update_subject(
 def remove_subject( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ):
     AuthService.validate_admin_access(db, id=income_id)
 
-    removed_subject = SubjectsService.remove_subject()
+    removed_subject = SubjectsService.remove_subject(db, id=id)
 
     return removed_subject

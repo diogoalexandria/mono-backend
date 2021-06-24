@@ -29,9 +29,10 @@ class SubjectsRepository( BaseRepository[SubjectsModel, SubjectBaseSchema, Subje
         return super().get_all(db)
 
     def update(self, db: Session, *, db_object:SubjectsModel, req_object: Union[SubjectBaseSchema, Dict[str, Any]]):
-        return super().update(db, db_object, req_object)
+        return super().update(db, db_object=db_object, req_object=req_object)
 
     def remove(self, db: Session, *, id: str) -> SubjectsModel:
-        return super().remove(db, id)
+        id = str(id)
+        return super().remove(db, id=id)
 
 SubjectsRepository = SubjectsRepository( SubjectsModel )

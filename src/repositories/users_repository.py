@@ -45,7 +45,7 @@ class UsersRepository( BaseRepository[UsersModel, UserRequestSchema, UserUpdateS
     def update( self, db: Session, *, db_object: UsersModel, req_object: Union[UserUpdateSchema,  Dict[str, Any]] ):
         return super().update( db, db_object=db_object, req_object=req_object )
 
-    def remove( self, db: Session, *, id: str ) -> UsersModel:
+    def remove( self, db: Session, *, id: str ) -> UsersModel:        
         return super().remove( db, id=id )       
           
 UsersRepository = UsersRepository( UsersModel )

@@ -88,7 +88,7 @@ class UsersService():
         return response_user(updated_user)
 
 
-    def remove_user( self, db: Session, *, id: str = id ):
+    def remove_user( self, db: Session, *, id: str = id ):        
         removed_user = UsersRepository.remove(db, id=id)
 
         return response_user(removed_user)

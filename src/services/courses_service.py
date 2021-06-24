@@ -56,7 +56,7 @@ class CoursesService():
         
         return response_course(updated_user)
 
-    def remove_course( self, db: Session, *, id: str = id ):
+    def remove_course( self, db: Session, *, id: str = id ):        
         removed_user = CoursesRepository.remove(db, id=id)
 
         return response_course(removed_user)

@@ -59,8 +59,7 @@ def update_course(
 
 @router.delete('/courses/{id}', response_model=CourseResponseSchema)
 def remove_course( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ):
-    AuthService.validate_admin_access(db, id=income_id)
-
+    AuthService.validate_admin_access(db, id=income_id)    
     removed_course = CoursesService.remove_course(db, id=id)
 
     return removed_course
