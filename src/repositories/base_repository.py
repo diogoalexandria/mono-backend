@@ -41,7 +41,9 @@ class BaseRepository(Generic[ModelType, RequestSchemaType, UpdateRequestSchemaTy
         else:                        
             incoming_object = req_object.dict(exclude_unset=True)        
         
-        for field in json_object:                                  # Para cada campo no objeto iterável
+        for field in json_object:
+            if field == "id":
+                continue                                  # Para cada campo no objeto iterável
             if field in incoming_object:                           # Se o campo também existe no objeto vindo com a novas infos
                 setattr(db_object, field, incoming_object[field])  # Atualiza o objeto do banco com o valor do objeto da requisição
             if field == "updated_at":

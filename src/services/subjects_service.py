@@ -15,9 +15,9 @@ class SubjectsService():
        return response_subject(subject)
 
 
-    def create_subjects_list( self, db: Session, *, config: ListRequestSchema ):        
-        skip, limit = dict(config).values() # Desestruturando (Unpacking) os valores do Request Body config
-        subjects = SubjectsRepository.get_all(db, skip=skip, limit=limit)
+    def create_subjects_list( self, db: Session, ):        
+        # skip, limit = dict(config).values() # Desestruturando (Unpacking) os valores do Request Body config
+        subjects = SubjectsRepository.get_all(db)
         
         response_subjects = [response_subject(subject) for subject in subjects]
         
@@ -29,8 +29,10 @@ class SubjectsService():
         if not subject:        
             raise HTTPException( status_code=400, detail="Matéria não encontrado." )
 
-        return response_subject(subject)
-
+        return {
+            "db_object": subject,
+            "response": response_subject(subject)
+        }
 
     def update_subject(
 
@@ -42,7 +44,7 @@ class SubjectsService():
 
     ):        
         # Reforçando que o id que chega no Params seja o mesmo que o Request Body
-        infos_object['id'] = id        
+        # infos_object['id'] = id        
 
         updated_user = SubjectsRepository.update(db, db_object=db_object, req_object=infos_object)
         

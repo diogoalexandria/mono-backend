@@ -20,8 +20,8 @@ def create_subject( income_id = Depends(Auth.wrapper), *, db: Session = Depends(
 
 
 @router.get('/subjects', response_model=List[SubjectResponseSchema])
-def list_subjects( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session),  config: ListRequestSchema ) -> Any:
-    subjects_list = SubjectsService.create_subjects_list()
+def list_subjects( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session) ) -> Any:
+    subjects_list = SubjectsService.create_subjects_list(db)
 
     return subjects_list
 
@@ -30,7 +30,7 @@ def list_subjects( income_id = Depends(Auth.wrapper), *, db: Session = Depends(d
 def list_subject( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:
     subject = SubjectsService.validate_id(db, id=id)
     
-    return subject
+    return subject["response"]
     
 
 @router.patch('/subjects/{id}', response_model=SubjectResponseSchema, status_code=202)
@@ -46,7 +46,11 @@ def update_subject(
     AuthService.validate_admin_access(db, id=income_id)
     
     current_subject = SubjectsService.validate_id(db, id=id)
-    updated_subject = SubjectsService.update_subject(db, db_object=current_subject, infos_object=new_infos)
+    updated_subject = SubjectsService.update_subject(
+        db,
+        db_object=current_subject["db_object"],
+        infos_object=new_infos
+    )
     
     return updated_subject
 
