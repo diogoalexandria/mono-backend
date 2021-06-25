@@ -46,14 +46,14 @@ class SubjectsService():
         # Reforçando que o id que chega no Params seja o mesmo que o Request Body
         # infos_object['id'] = id        
 
-        updated_user = SubjectsRepository.update(db, db_object=db_object, req_object=infos_object)
+        updated_subject = SubjectsRepository.update(db, db_object=db_object, req_object=infos_object)
         
-        return response_subject(updated_user)
+        return response_subject(updated_subject)
 
     def remove_subject( self, db: Session, *, id: str = id ):
-        removed_user = SubjectsRepository.remove(db, id=id)
+        removed_subject = SubjectsRepository.remove(db, id=id)
 
-        return response_subject(removed_user)
+        return response_subject(removed_subject)
 
 
 SubjectsService = SubjectsService()

@@ -20,8 +20,7 @@ depends_on = None
 def upgrade():
     op.create_table(
         'subscriptions',
-        sa.Column('id',         UUID(as_uuid=True)  , nullable=False, index=True, primary_key=True),
-        sa.Column('sub_date',   sa.DateTime         , nullable=False),
+        sa.Column('id',         UUID(as_uuid=True)  , nullable=False, index=True, primary_key=True),        
         sa.Column('student_id', UUID(as_uuid=True)  , sa.ForeignKey('users.id'), nullable=True),
         sa.Column('class_id',   UUID(as_uuid=True)  , sa.ForeignKey('classes.id'), nullable=True),
         sa.Column('status',     sa.String           , nullable=False),

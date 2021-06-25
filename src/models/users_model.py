@@ -1,6 +1,5 @@
 from sqlalchemy import Column, String, DateTime, ForeignKey
 from src.database.base_class import Base
-from src.models.courses_model import CoursesModel
 
 class UsersModel(Base):
     __tablename__   = "users"

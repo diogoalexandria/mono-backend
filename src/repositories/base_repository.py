@@ -55,7 +55,9 @@ class BaseRepository(Generic[ModelType, RequestSchemaType, UpdateRequestSchemaTy
         
         return db_object
 
-    def remove(self, db: Session, *, id: str) -> ModelType:        
+    def remove(self, db: Session, *, id: str) -> ModelType:
+        print(f'4: {id}')
+        print(type(id))        
         db_object = db.query(self.model).get(id)
         db.delete(db_object)
         db.commit()

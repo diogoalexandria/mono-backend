@@ -1,52 +1,53 @@
-from typing import Any
+from typing import Any, Dict, List, Union
 from fastapi import APIRouter, Depends
 from src.helpers.auth import Auth
 from src.database.session import db_session
 from sqlalchemy.orm.session import Session
 from src.services.auth_service import AuthService
-from src.schemas.class_schemas import ClassBaseSchema, ClassResponseSchema
+from src.services.classes_service import ClassesService
+from src.schemas.classes_schemas import ClassBaseSchema, ClassResponseSchema
 
 router = APIRouter()
 
 @router.post('/classes', response_model=ClassResponseSchema, status_code=201)
-def create_course( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), new_course: ClassBaseSchema ) -> Any:
+def create_class( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), new_class: ClassBaseSchema ) -> Any:
     AuthService.validate_admin_access(db, id=income_id)
     
-    CoursesService.validate_name(db, name=new_course.name)
+    # ClassesService.validate_name(db, name=new_class.name)
 
-    created_course = CoursesService.create_course(db, object=new_course)
+    created_class = ClassesService.create_class(db, object=new_class)
     
-    return created_course
+    return created_class
 
 
-@router.get('/courses', response_model=List[CourseResponseSchema])
-def list_courses( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session) ) -> Any:
-    courses_list = CoursesService.create_courses_list(db)
+@router.get('/classes', response_model=List[ClassResponseSchema])
+def list_classes( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session) ) -> Any:
+    classes_list = ClassesService.create_classes_list(db)
 
-    return courses_list
+    return classes_list
 
 
-@router.get('/courses/{id}', response_model=CourseResponseSchema)
-def list_course( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:
-    course = CoursesService.validate_id(db, id=id)
+@router.get('/classes/{id}', response_model=ClassResponseSchema)
+def list_class( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:
+    class_item = ClassesService.validate_id(db, id=id)
     
-    return course["response"]
+    return class_item["response"]
     
 
-@router.patch('/courses/{id}', response_model=CourseResponseSchema, status_code=202)
-def update_course(
+@router.patch('/classes/{id}', response_model=ClassResponseSchema, status_code=202)
+def update_class(
 
     income_id=Depends(Auth.wrapper),
     *,
     db: Session = Depends(db_session),
-    new_infos: Union[CourseBaseSchema,  Dict[str, str]],
+    new_infos: Union[ClassBaseSchema,  Dict[str, str]],
     id: str = id 
     
 ) -> Any:
     AuthService.validate_admin_access(db, id=income_id)
     
-    current_course = CoursesService.validate_id(db, id=id)
-    updated_course = CoursesService.update_course(
+    current_course = ClassesService.validate_id(db, id=id)
+    updated_course = ClassesService.update_class(
         db,
         db_object=current_course["db_object"],
         infos_object=new_infos
@@ -55,9 +56,11 @@ def update_course(
     return updated_course
 
 
-@router.delete('/courses/{id}', response_model=CourseResponseSchema)
-def remove_course( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ):
-    AuthService.validate_admin_access(db, id=income_id)    
-    removed_course = CoursesService.remove_course(db, id=id)
+@router.delete('/classes/{id}', response_model=ClassResponseSchema)
+def remove_class( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ):
+    AuthService.validate_admin_access(db, id=income_id)
+    print(f'1: {id}')
+    print(type(id))    
+    removed_course = ClassesService.remove_class(db, id=id)
 
     return removed_course
