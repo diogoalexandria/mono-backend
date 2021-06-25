@@ -33,7 +33,7 @@ class SubscriptionsService():
     def validate_id( self, db: Session, *, id: str = id ) -> SubscriptionsModel:
         subscription = SubscriptionsRepository.get_by_id( db, id=id )
         if not subscription:        
-            raise HTTPException( status_code=400, detail="Turma não encontrado." )
+            raise HTTPException( status_code=400, detail="Inscrição não encontrado." )
         
         return {
             "db_object": subscription,
@@ -57,9 +57,7 @@ class SubscriptionsService():
         
         return response_subscription(updated_subscription)
 
-    def remove_subscription( self, db: Session, *, id: str = id ):
-        print(f'2: {id}')
-        print(type(id))        
+    def remove_subscription( self, db: Session, *, id: str = id ):               
         removed_subscription = SubscriptionsRepository.remove(db, id=id)
 
         return response_subscription(removed_subscription)

@@ -33,9 +33,7 @@ class ClassesRepository( BaseRepository[ClassesModel, ClassBaseSchema, ClassBase
     def update(self, db: Session, *, db_object:ClassesModel, req_object: Union[ClassBaseSchema, Dict[str, Any]]):
         return super().update(db, db_object=db_object, req_object=req_object)
 
-    def remove(self, db: Session, *, id: str) -> ClassesModel:
-        print(f'3: {id}')
-        print(type(id))               
+    def remove(self, db: Session, *, id: str) -> ClassesModel:                      
         return super().remove(db, id=id)
 
 ClassesRepository = ClassesRepository( ClassesModel )

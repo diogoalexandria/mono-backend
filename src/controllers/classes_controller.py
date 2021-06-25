@@ -58,9 +58,7 @@ def update_class(
 
 @router.delete('/classes/{id}', response_model=ClassResponseSchema)
 def remove_class( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ):
-    AuthService.validate_admin_access(db, id=income_id)
-    print(f'1: {id}')
-    print(type(id))    
+    AuthService.validate_admin_access(db, id=income_id)     
     removed_course = ClassesService.remove_class(db, id=id)
 
     return removed_course

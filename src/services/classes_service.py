@@ -55,9 +55,7 @@ class ClassesService():
         
         return response_class(updated_class)
 
-    def remove_class( self, db: Session, *, id: str = id ):
-        print(f'2: {id}')
-        print(type(id))        
+    def remove_class( self, db: Session, *, id: str = id ):               
         removed_class = ClassesRepository.remove(db, id=id)
 
         return response_class(removed_class)

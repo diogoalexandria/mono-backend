@@ -58,8 +58,7 @@ def update_subscription(
 @router.delete('/subscriptions/{id}', response_model=SubscriptionResponseSchema)
 def remove_subscription( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ):
     AuthService.validate_admin_access(db, id=income_id)
-    print(f'1: {id}')
-    print(type(id))    
+       
     removed_subscription = SubscriptionsService.remove_subscription(db, id=id)
 
     return removed_subscription

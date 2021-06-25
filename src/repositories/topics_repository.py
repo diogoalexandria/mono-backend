@@ -1,4 +1,6 @@
 from datetime import datetime
+from src.schemas.topics_schemas import TopicBaseSchema
+from src.models.topics_model import TopicsModel
 from src.schemas.subscriptions_schemas import SubscriptionBaseSchema
 from src.models.subscriptions_model import SubscriptionsModel
 import uuid
@@ -7,9 +9,9 @@ from typing import Any, Dict, List, Optional, Union
 from sqlalchemy.orm.session import Session
 from src.repositories.base_repository import BaseRepository
 
-class SubscriptionsRepository( BaseRepository[SubscriptionsModel, SubscriptionBaseSchema, SubscriptionBaseSchema] ):
-    def create(self, db: Session, *, req_object: SubscriptionBaseSchema) -> SubscriptionsModel:
-        db_object = SubscriptionsModel(
+class TopicsRepository( BaseRepository[TopicsModel, TopicBaseSchema, TopicBaseSchema] ):
+    def create(self, db: Session, *, req_object: TopicBaseSchema) -> TopicsModel:
+        db_object = TopicsModel(
 
             id=uuid.uuid4(),
             sub_date=datetime.utcnow(),    
@@ -21,19 +23,19 @@ class SubscriptionsRepository( BaseRepository[SubscriptionsModel, SubscriptionBa
         )
         return super().create(db, req_object=db_object)
 
-    def get_by_id(self, db: Session, id: str) -> Optional[SubscriptionsModel]:
+    def get_by_id(self, db: Session, id: str) -> Optional[TopicsModel]:
         return super().get_by_id(db, id)
     
-    def get_by_name(self, db: Session, name: str) -> Optional[SubscriptionsModel]:
-        return db.query( SubscriptionsModel ).filter( SubscriptionsModel.name == name ).first()
+    def get_by_name(self, db: Session, name: str) -> Optional[TopicsModel]:
+        return db.query( TopicsModel ).filter( TopicsModel.name == name ).first()
     
-    def get_all(self, db: Session) -> List[SubscriptionsModel]:
+    def get_all(self, db: Session) -> List[TopicsModel]:
         return super().get_all(db)
 
-    def update(self, db: Session, *, db_object:SubscriptionsModel, req_object: Union[SubscriptionBaseSchema, Dict[str, Any]]):
+    def update(self, db: Session, *, db_object:TopicsModel, req_object: Union[TopicBaseSchema, Dict[str, Any]]):
         return super().update(db, db_object=db_object, req_object=req_object)
 
-    def remove(self, db: Session, *, id: str) -> SubscriptionsModel:                       
+    def remove(self, db: Session, *, id: str) -> TopicsModel:                       
         return super().remove(db, id=id)
 
-SubscriptionsRepository = SubscriptionsRepository( SubscriptionsModel )
+TopicsRepository = TopicsRepository( TopicsModel )
