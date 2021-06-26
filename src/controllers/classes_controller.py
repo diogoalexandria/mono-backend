@@ -27,11 +27,17 @@ def list_classes( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db
     return classes_list
 
 
+@router.get('/classes_professor', response_model=List[ClassResponseSchema])
+def list_classes_professor( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:
+    classes_list = ClassesService.create_classes_by_professor(db, id=income_id)
+    return classes_list
+
+
 @router.get('/classes/{id}', response_model=ClassResponseSchema)
 def list_class( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:
     class_item = ClassesService.validate_id(db, id=id)
     
-    return class_item["response"]
+    return class_item["response"]    
     
 
 @router.patch('/classes/{id}', response_model=ClassResponseSchema, status_code=202)
@@ -62,3 +68,4 @@ def remove_class( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db
     removed_course = ClassesService.remove_class(db, id=id)
 
     return removed_course
+    

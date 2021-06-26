@@ -1,6 +1,6 @@
 from src.models.subscriptions_model import SubscriptionsModel
 from src.repositories.subscriptions_repository import SubscriptionsRepository
-from src.helpers.subscriptions import response_subscription
+from src.helpers.subscriptions import response_subscription, response_subscription_user
 from src.schemas.subscriptions_schemas import SubscriptionBaseSchema
 from src.schemas.status_schema import StatusOptions
 from typing import Dict, Union
@@ -23,6 +23,14 @@ class SubscriptionsService():
         response_subscriptions = [response_subscription(subscription) for subscription in subscriptions]
         
         return response_subscriptions
+    
+    def create_subscriptions_users_list(self, db: Session, id: str):        
+        subscriptions_users = SubscriptionsRepository.get_by_class_id(db, id=id)
+        print(subscriptions_users)
+        
+        response_subscriptions_users = [response_subscription_user(subscription) for subscription in subscriptions_users]
+        
+        return response_subscriptions_users
 
     def validate_name( self, db: Session, *, name: str ):
         name_exist = SubscriptionsRepository.get_by_name(db, name=name)

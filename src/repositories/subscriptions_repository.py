@@ -1,4 +1,5 @@
 from datetime import datetime
+from src.models.users_model import UsersModel
 from src.schemas.subscriptions_schemas import SubscriptionBaseSchema
 from src.models.subscriptions_model import SubscriptionsModel
 import uuid
@@ -26,6 +27,14 @@ class SubscriptionsRepository( BaseRepository[SubscriptionsModel, SubscriptionBa
     
     def get_by_name(self, db: Session, name: str) -> Optional[SubscriptionsModel]:
         return db.query( SubscriptionsModel ).filter( SubscriptionsModel.name == name ).first()
+    
+    def get_by_class_id(self, db: Session, id: str) -> List[Any]:        
+        return db.query(self.model, UsersModel)\
+                .join(UsersModel)\
+                .filter(self.model.student_id == UsersModel.id)\
+                .filter(self.model.class_id == id)\
+                .filter(UsersModel.status == "active")\
+                .all()
     
     def get_all(self, db: Session) -> List[SubscriptionsModel]:
         return super().get_all(db)

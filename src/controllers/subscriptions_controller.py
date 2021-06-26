@@ -1,6 +1,6 @@
 from src.services.subscriptions_service import SubscriptionsService
 from typing import Any, Dict, List, Union
-from src.schemas.subscriptions_schemas import SubscriptionBaseSchema, SubscriptionResponseSchema
+from src.schemas.subscriptions_schemas import SubscriptionBaseSchema, SubscriptionResponseSchema, SubscriptionUsersResponseSchema
 from fastapi import APIRouter, Depends
 from src.helpers.auth import Auth
 from src.database.session import db_session
@@ -18,12 +18,27 @@ def create_subscription( income_id = Depends(Auth.wrapper), *, db: Session = Dep
     created_subscription = SubscriptionsService.create_subscription(db, object=new_subscription)
     
     return created_subscription
+    
 
 @router.get('/subscriptions', response_model=List[SubscriptionResponseSchema])
 def list_subscriptions( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session) ) -> Any:
     subscriptions_list = SubscriptionsService.create_subscriptions_list(db)
 
     return subscriptions_list
+
+
+@router.get('/subscriptions_users/{id}', response_model=List[SubscriptionUsersResponseSchema])
+def list_subscriptions_users(
+
+    income_id = Depends(Auth.wrapper),
+    *,
+    db: Session = Depends(db_session),
+    id: str = id
+
+) -> Any:    
+    subscriptions_users_list = SubscriptionsService.create_subscriptions_users_list(db, id=id)
+
+    return subscriptions_users_list
 
 
 @router.get('/subscriptions/{id}', response_model=SubscriptionResponseSchema)

@@ -10,4 +10,5 @@ class CoursesModel(Base):
     status     = Column(String   , nullable=False, default="active")
     created_at = Column(DateTime , nullable=False)
     updated_at = Column(DateTime , nullable=True)
+    # registries = relationship('Registries', cascade='all,delete', backref='courses')
     

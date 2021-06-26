@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
 from src.database.base_class import Base
 
 class UsersModel(Base):
@@ -16,3 +17,5 @@ class UsersModel(Base):
     course_id       = Column(String   , ForeignKey('courses.id'), nullable=True)
     created_at      = Column(DateTime , nullable=False)
     updated_at      = Column(DateTime , nullable=True)
+    subscriptions   = relationship('SubscriptionsModel', cascade='all,delete', backref='users')
+    # attendances   = relationship('AttendancesModel', cascade='all,delete', backref='users')

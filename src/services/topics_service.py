@@ -11,9 +11,9 @@ from sqlalchemy.orm.session import Session
 
 class TopicsService():
     def create_topic( self, db: Session, *, object: TopicBaseSchema ):
-       topic = TopicsRepository.create(db, req_object=object)
-
-       return response_topic(topic)
+        topic = TopicsRepository.create(db, req_object=object)
+        
+        return response_topic(topic)
 
 
     def create_topics_list( self, db: Session ):        

@@ -4,13 +4,11 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from src.helpers.auth import Auth
 from src.database.session import db_session
-from src.schemas.list_schema import ListRequestSchema
 from src.schemas.users_schemas import StatusOptions, UserResponseSchema, UserRequestSchema, UserUpdateSchema
 from src.services.auth_service import AuthService
 from src.services.users_service import UsersService
 
 router = APIRouter()
-
 
 @router.post('/users', response_model=UserResponseSchema, status_code=201)
 def create_user(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session), new_user: UserRequestSchema) -> Any:
@@ -27,7 +25,7 @@ def create_user(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_ses
 @router.get('/users', response_model=List[UserResponseSchema])
 def list_users(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session)) -> Any:    
     users_list = UsersService.create_users_list(db)    
-    return users_list
+    return users_list 
 
 
 @router.get('/users/{id}', response_model=UserResponseSchema)

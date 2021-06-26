@@ -14,9 +14,8 @@ class TopicsRepository( BaseRepository[TopicsModel, TopicBaseSchema, TopicBaseSc
         db_object = TopicsModel(
 
             id=uuid.uuid4(),
-            sub_date=datetime.utcnow(),    
-            class_id=req_object.class_id,
-            student_id=req_object.student_id,            
+            class_id=req_object.class_id,             
+            topic_date=req_object.topic_date,    
             status=StatusOptions.active,
             created_at=datetime.utcnow()
 

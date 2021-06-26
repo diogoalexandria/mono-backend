@@ -23,6 +23,11 @@ class ClassesRepository( BaseRepository[ClassesModel, ClassBaseSchema, ClassBase
 
     def get_by_id(self, db: Session, id: str) -> Optional[ClassesModel]:
         return super().get_by_id(db, id)
+
+    def get_by_professor_id(self, db: Session, id: str) -> Optional[ClassesModel]:
+        return db.query(self.model)\
+                .filter(self.model.professor_id == id)\
+                .all()
     
     def get_by_name(self, db: Session, name: str) -> Optional[ClassesModel]:
         return db.query( ClassesModel ).filter( ClassesModel.name == name ).first()
