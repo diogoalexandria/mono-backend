@@ -1,3 +1,6 @@
+from src.models.topics_model import TopicsModel
+from src.models.classes_model import ClassesModel
+from src.models.subscriptions_model import SubscriptionsModel
 import uuid
 from typing import Optional, List, Union, Dict, Any
 from datetime import datetime
@@ -38,6 +41,18 @@ class UsersRepository( BaseRepository[UsersModel, UserRequestSchema, UserUpdateS
 
     def get_by_id( self, db: Session, *, id: str) -> Optional[UsersModel]:
         return super().get_by_id(db, id=id)
+
+    def get_by_topic( self, db: Session, *, id: str) -> List[UsersModel]:        
+        return db.query(self.model)\
+                .join(SubscriptionsModel)\
+                .join(ClassesModel)\
+                .join(TopicsModel)\
+                .filter(TopicsModel.id == id)\
+                .all()
+                # .join(ClassesModel, ClassesModel.subscriptions)\
+                # .join(TopicsModel)\
+                # 
+                # .all()
 
     def get_all( self, db: Session ) -> List[UsersModel]:
         return super().get_all( db )

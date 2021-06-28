@@ -25,6 +25,11 @@ def create_user(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_ses
 @router.get('/users', response_model=List[UserResponseSchema])
 def list_users(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session)) -> Any:    
     users_list = UsersService.create_users_list(db)    
+    return users_list
+
+@router.get('/users_topic/{id}', response_model=List[UserResponseSchema])
+def list_users(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id) -> Any:        
+    users_list = UsersService.create_users_topic_list(db, id=id)    
     return users_list 
 
 

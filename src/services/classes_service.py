@@ -38,8 +38,8 @@ class ClassesService():
             "response": response_class(class_item)
         }
 
-    def create_classes_by_professor( self, db: Session, *, id: str = id ):
-        classes = ClassesRepository.get_by_professor_id( db, id=id )
+    def create_classes_list_by_professor( self, db: Session, *, id: str = id ):
+        classes = ClassesRepository.get_by_professor( db, id=id )
         response_classes = [response_class(class_item) for class_item in classes]
         
         return response_classes

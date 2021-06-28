@@ -13,7 +13,6 @@ class SubscriptionsRepository( BaseRepository[SubscriptionsModel, SubscriptionBa
         db_object = SubscriptionsModel(
 
             id=uuid.uuid4(),
-            sub_date=datetime.utcnow(),    
             class_id=req_object.class_id,
             student_id=req_object.student_id,            
             status=StatusOptions.active,

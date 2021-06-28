@@ -1,11 +1,11 @@
-from datetime import datetime
 import uuid
-from src.schemas.status_schema import StatusOptions
 from typing import Any, Dict, List, Optional, Union
+from datetime import datetime
 from sqlalchemy.orm.session import Session
+from src.models.classes_model import ClassesModel
+from src.schemas.status_schema import StatusOptions
 from src.schemas.classes_schemas import ClassBaseSchema
 from src.repositories.base_repository import BaseRepository
-from src.models.classes_model import ClassesModel
 
 class ClassesRepository( BaseRepository[ClassesModel, ClassBaseSchema, ClassBaseSchema] ):
     def create(self, db: Session, *, req_object: ClassBaseSchema) -> ClassesModel:
@@ -24,7 +24,7 @@ class ClassesRepository( BaseRepository[ClassesModel, ClassBaseSchema, ClassBase
     def get_by_id(self, db: Session, id: str) -> Optional[ClassesModel]:
         return super().get_by_id(db, id)
 
-    def get_by_professor_id(self, db: Session, id: str) -> Optional[ClassesModel]:
+    def get_by_professor(self, db: Session, id: str) -> List[ClassesModel]:
         return db.query(self.model)\
                 .filter(self.model.professor_id == id)\
                 .all()

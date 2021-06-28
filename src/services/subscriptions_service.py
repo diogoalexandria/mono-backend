@@ -25,12 +25,12 @@ class SubscriptionsService():
         return response_subscriptions
     
     def create_subscriptions_users_list(self, db: Session, id: str):        
-        subscriptions_users = SubscriptionsRepository.get_by_class_id(db, id=id)
-        print(subscriptions_users)
+        subscriptions_users = SubscriptionsRepository.get_by_class_id(db, id=id)        
         
         response_subscriptions_users = [response_subscription_user(subscription) for subscription in subscriptions_users]
         
         return response_subscriptions_users
+        
 
     def validate_name( self, db: Session, *, name: str ):
         name_exist = SubscriptionsRepository.get_by_name(db, name=name)

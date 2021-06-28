@@ -21,9 +21,8 @@ def upgrade():
     op.create_table(
         'attendances',
         sa.Column('id',         UUID(as_uuid=True)  , nullable=False, index=True, primary_key=True),
-        sa.Column('course_id',  UUID(as_uuid=True)  , sa.ForeignKey('courses.id'), nullable=True),
-        sa.Column('subject_id', UUID(as_uuid=True)  , sa.ForeignKey('subjects.id'), nullable=True),
-        sa.Column('status',     sa.String           , nullable=False),
+        sa.Column('topic_id',   UUID(as_uuid=True)  , sa.ForeignKey('topics.id'), nullable=True),
+        sa.Column('student_id', UUID(as_uuid=True)  , sa.ForeignKey('users.id'), nullable=True),        
         sa.Column('created_at', sa.DateTime         , nullable=False),
         sa.Column('updated_at', sa.DateTime         , nullable=True)
     )

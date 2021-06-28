@@ -1,4 +1,5 @@
 from datetime import datetime
+from src.models.classes_model import ClassesModel
 from src.schemas.topics_schemas import TopicBaseSchema
 from src.models.topics_model import TopicsModel
 from src.schemas.subscriptions_schemas import SubscriptionBaseSchema
@@ -24,6 +25,12 @@ class TopicsRepository( BaseRepository[TopicsModel, TopicBaseSchema, TopicBaseSc
 
     def get_by_id(self, db: Session, id: str) -> Optional[TopicsModel]:
         return super().get_by_id(db, id)
+    
+    def get_by_professor(self, db: Session, id: str) -> List[Any]:
+        return db.query(self.model, ClassesModel)\
+                .join(ClassesModel)\
+                .filter(ClassesModel.professor_id == id)\
+                .all()
     
     def get_by_name(self, db: Session, name: str) -> Optional[TopicsModel]:
         return db.query( TopicsModel ).filter( TopicsModel.name == name ).first()

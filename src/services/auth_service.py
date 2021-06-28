@@ -4,7 +4,7 @@ from typing import Union
 from uuid import UUID
 from fastapi import HTTPException
 from src.helpers.auth import Auth
-from src.helpers.users import is_active, is_admin, is_current_user
+from src.helpers.users import is_active, is_admin, is_current_user, is_professor
 
 class AuthService():
     def validate_access( self, user: Union[UsersModel, None], password: str ):
@@ -23,6 +23,10 @@ class AuthService():
 
     def validate_admin_access( self, db: Session, *, id: str ):
         if not is_admin(db, id=id):
+            raise HTTPException( status_code=401, detail="Sem permissão para realizar essa ação." )
+    
+    def validate_professor_access( self, db: Session, *, id: str ):
+        if not is_professor(db, id=id):
             raise HTTPException( status_code=401, detail="Sem permissão para realizar essa ação." )
 
     def validate_admin_or_current_access( self, db: Session, *, income_id: str, action_id: str ):

@@ -3,7 +3,6 @@ from typing import Dict, Union
 from fastapi import HTTPException
 from src.helpers.courses import response_course
 from sqlalchemy.orm.session import Session
-from src.schemas.list_schema import ListRequestSchema
 from src.models.courses_model import CoursesModel
 from src.schemas.courses_schemas import CourseBaseSchema
 from src.repositories.courses_repository import CoursesRepository

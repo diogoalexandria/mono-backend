@@ -1,13 +1,11 @@
 from src.models.topics_model import TopicsModel
 from src.repositories.topics_repository import TopicsRepository
-from src.helpers.topics import response_topic
+from src.helpers.topics import response_topic, response_topic_professor
 from src.schemas.topics_schemas import TopicBaseSchema
 from src.schemas.status_schema import StatusOptions
 from typing import Dict, Union
 from fastapi import HTTPException
-
 from sqlalchemy.orm.session import Session
-
 
 class TopicsService():
     def create_topic( self, db: Session, *, object: TopicBaseSchema ):
@@ -23,6 +21,15 @@ class TopicsService():
         response_topics = [response_topic(topic) for topic in topics]
         
         return response_topics
+
+
+    def create_topics_list_by_professor(self, db: Session, *, id: str = id):
+        topics = TopicsRepository.get_by_professor(db, id=id)
+
+        response_topics = [response_topic_professor(topic) for topic in topics]
+        
+        return response_topics        
+
 
     def validate_name( self, db: Session, *, name: str ):
         name_exist = TopicsRepository.get_by_name(db, name=name)

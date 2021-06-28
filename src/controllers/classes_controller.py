@@ -28,8 +28,8 @@ def list_classes( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db
 
 
 @router.get('/classes_professor', response_model=List[ClassResponseSchema])
-def list_classes_professor( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:
-    classes_list = ClassesService.create_classes_by_professor(db, id=income_id)
+def list_classes_professor( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session)) -> Any:
+    classes_list = ClassesService.create_classes_list_by_professor(db, id=income_id)
     return classes_list
 
 

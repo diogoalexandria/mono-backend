@@ -7,7 +7,6 @@ from src.helpers.email import is_email
 from src.helpers.users import response_user
 from src.models.users_model import UsersModel
 from sqlalchemy.orm.session import Session
-from src.schemas.list_schema import ListRequestSchema
 from src.schemas.users_schemas import StatusOptions, UserRequestSchema, UserResponseSchema, UserUpdateSchema
 from src.repositories.users_repository import UsersRepository
 
@@ -55,9 +54,18 @@ class UsersService():
         return response_user(created_user)
 
 
-    def create_users_list( self, db: Session ):
+    def create_users_list( self, db: Session, ):
          # Desestruturando (Unpacking) os valores do Request Body config
         users = UsersRepository.get_all(db)
+                
+        response_users = [response_user(user) for user in users]        
+        
+        return response_users
+
+    
+    def create_users_topic_list( self, db: Session, *, id: str = id ):
+         # Desestruturando (Unpacking) os valores do Request Body config          
+        users = UsersRepository.get_by_topic(db, id=id)
                 
         response_users = [response_user(user) for user in users]        
         

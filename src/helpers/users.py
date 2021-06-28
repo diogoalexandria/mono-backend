@@ -12,6 +12,10 @@ def is_admin(db: Session, *, id: str) -> bool:
     user = UsersRepository.get_by_id(db, id=id)    
     return user.entity == UsersEntities.administrator
 
+def is_professor(db: Session, *, id: str) -> bool:
+    user = UsersRepository.get_by_id(db, id=id)    
+    return user.entity == UsersEntities.professor
+
 def is_current_user(income_id: str, action_id: UUID) -> bool:
     return income_id == str(action_id)
 

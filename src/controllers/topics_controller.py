@@ -1,4 +1,4 @@
-from src.schemas.topics_schemas import TopicBaseSchema, TopicResponseSchema
+from src.schemas.topics_schemas import TopicBaseSchema, TopicProfessorResponseSchema, TopicResponseSchema
 from typing import Any, Dict, List, Union
 from fastapi import APIRouter, Depends
 from src.helpers.auth import Auth
@@ -34,9 +34,9 @@ def list_topics( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_
     return topics_list
 
 
-@router.get('/topics_class', response_model=List[TopicResponseSchema])
-def list_topics_class( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session) ) -> Any:
-    topics_list = TopicsService.create_topics_list(db)
+@router.get('/topics_professor', response_model=List[TopicProfessorResponseSchema])
+def list_topics_professor( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session) ) -> Any:
+    topics_list = TopicsService.create_topics_list_by_professor(db, id=income_id)
 
     return topics_list
 
