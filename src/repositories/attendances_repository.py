@@ -1,4 +1,5 @@
 from datetime import datetime
+from src.models.users_model import UsersModel
 from src.schemas.attendances_schemas import AttendanceBaseSchema, AttendancesListSchema
 from src.models.attendances_model import AttendancesModel
 import uuid
@@ -36,13 +37,17 @@ class AttendancesRepository( BaseRepository[AttendancesModel, AttendanceBaseSche
         db.commit()
         # db.refresh(db_objects)
 
-        return db_objects
-        
-            
+        return db_objects            
         
 
     def get_by_id(self, db: Session, id: str) -> Optional[AttendancesModel]:
-        return super().get_by_id(db, id)    
+        return super().get_by_id(db, id)
+
+    def get_by_topic(self, db: Session, id: str) -> List[Any]:        
+        return db.query(self.model,UsersModel)\
+                 .join(UsersModel)\
+                 .filter(self.model.topic_id == id)\
+                 .all() 
     
     def get_by_name(self, db: Session, name: str) -> Optional[AttendancesModel]:
         return db.query( AttendancesModel ).filter( AttendancesModel.name == name ).first()

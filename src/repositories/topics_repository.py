@@ -31,6 +31,11 @@ class TopicsRepository( BaseRepository[TopicsModel, TopicBaseSchema, TopicBaseSc
                 .join(ClassesModel)\
                 .filter(ClassesModel.professor_id == id)\
                 .all()
+
+    def get_by_class(self, db: Session, id: str) -> List[Any]:
+        return db.query(self.model)\
+                .filter(self.model.class_id == id)\
+                .all()
     
     def get_by_name(self, db: Session, name: str) -> Optional[TopicsModel]:
         return db.query( TopicsModel ).filter( TopicsModel.name == name ).first()

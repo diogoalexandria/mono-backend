@@ -28,6 +28,14 @@ class TopicsService():
 
         response_topics = [response_topic_professor(topic) for topic in topics]
         
+        return response_topics
+
+
+    def create_topics_list_by_class(self, db: Session, *, id: str = id):
+        topics = TopicsRepository.get_by_class(db, id=id)
+
+        response_topics = [response_topic(topic) for topic in topics]
+        
         return response_topics        
 
 

@@ -1,13 +1,9 @@
 from src.schemas.attendances_schemas import AttendanceBaseSchema, AttendancesListSchema
 from src.models.attendances_model import AttendancesModel
-from src.helpers.attendances import response_attendance
+from src.helpers.attendances import response_attendance, response_attendance_topic
 from src.repositories.attendances_repository import AttendancesRepository
-from src.models.topics_model import TopicsModel
-from src.repositories.topics_repository import TopicsRepository
-from src.helpers.topics import response_topic, response_topic_professor
-from src.schemas.topics_schemas import TopicBaseSchema
 from src.schemas.status_schema import StatusOptions
-from typing import Dict, List, Union
+from typing import Dict, Union
 from fastapi import HTTPException
 from sqlalchemy.orm.session import Session
 
@@ -32,6 +28,15 @@ class AttendancesService():
         
         response_attendances = [response_attendance(attendance) for attendance in attendances]
         
+        return response_attendances
+
+
+    def create_attendance_list_by_topic( self, db: Session, *, id: str = id  ):        
+        # skip, limit = dict(config).values() # Desestruturando (Unpacking) os valores do Request Body config
+        attendances = AttendancesRepository.get_by_topic(db, id=id)
+        
+        response_attendances = [response_attendance_topic(attendance) for attendance in attendances]
+        
         return response_attendances    
 
 
@@ -42,7 +47,7 @@ class AttendancesService():
         
         return {
             "db_object": attendance,
-            "response": response_topic(attendance)
+            "response": response_attendance(attendance)
         }
 
 

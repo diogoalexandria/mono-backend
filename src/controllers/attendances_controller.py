@@ -1,5 +1,5 @@
 from src.services.attendances_service import AttendancesService
-from src.schemas.attendances_schemas import AttendanceBaseSchema, AttendanceResponseSchema, AttendancesListSchema
+from src.schemas.attendances_schemas import AttendanceBaseSchema, AttendanceResponseSchema, AttendanceTopicResponseSchema, AttendancesListSchema
 from src.services.auth_service import AuthService
 from typing import Any, Dict, List, Union
 from src.database.session import db_session
@@ -27,15 +27,15 @@ def list_attendances( income_id = Depends(Auth.wrapper), *, db: Session = Depend
     return attendances_list
 
 
-# @router.get('/attendances_topic', response_model=List[TopicProfessorResponseSchema])
-# def list_topics_professor( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session) ) -> Any:
-#     topics_list = AttendancesService.create_topics_list_by_professor(db, id=income_id)
+@router.get('/attendances_topic/{id}', response_model=List[AttendanceTopicResponseSchema])
+def list_attendances_topic( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:    
+    topics_list = AttendancesService.create_attendance_list_by_topic(db, id=id)
 
-#     return topics_list
+    return topics_list
 
 
 @router.get('/attendances/{id}', response_model=AttendanceResponseSchema)
-def list_topic( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:
+def list_topic( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:    
     topic = AttendancesService.validate_id(db, id=id)
     
     return topic["response"]

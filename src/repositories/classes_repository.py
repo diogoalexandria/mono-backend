@@ -1,3 +1,5 @@
+from src.models.users_model import UsersModel
+from src.models.subscriptions_model import SubscriptionsModel
 import uuid
 from typing import Any, Dict, List, Optional, Union
 from datetime import datetime
@@ -21,24 +23,38 @@ class ClassesRepository( BaseRepository[ClassesModel, ClassBaseSchema, ClassBase
         )
         return super().create(db, req_object=db_object)
 
+
     def get_by_id(self, db: Session, id: str) -> Optional[ClassesModel]:
         return super().get_by_id(db, id)
+
 
     def get_by_professor(self, db: Session, id: str) -> List[ClassesModel]:
         return db.query(self.model)\
                 .filter(self.model.professor_id == id)\
                 .all()
+
+    
+    def get_by_student(self, db: Session, id: str) -> List[ClassesModel]:
+        return db.query(self.model)\
+                .join(SubscriptionsModel)\
+                .filter(SubscriptionsModel.student_id == id)\
+                .all()                
+                
     
     def get_by_name(self, db: Session, name: str) -> Optional[ClassesModel]:
         return db.query( ClassesModel ).filter( ClassesModel.name == name ).first()
     
+
     def get_all(self, db: Session) -> List[ClassesModel]:
         return super().get_all(db)
+
 
     def update(self, db: Session, *, db_object:ClassesModel, req_object: Union[ClassBaseSchema, Dict[str, Any]]):
         return super().update(db, db_object=db_object, req_object=req_object)
 
+
     def remove(self, db: Session, *, id: str) -> ClassesModel:                      
         return super().remove(db, id=id)
+        
 
 ClassesRepository = ClassesRepository( ClassesModel )

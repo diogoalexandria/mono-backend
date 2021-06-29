@@ -16,6 +16,7 @@ def create_user(income_id=Depends(Auth.wrapper), *, db: Session = Depends(db_ses
 
     UsersService.validate_username(db, username=new_user.username)
     UsersService.validate_email(db, email=new_user.email)
+    # UsersService.validate_student( new_user )
 
     created_user = UsersService.create_user(db, object=new_user)
 

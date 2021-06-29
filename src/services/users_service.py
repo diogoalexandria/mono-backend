@@ -35,6 +35,13 @@ class UsersService():
         username_exist = UsersRepository.get_by_username(db, username=username)
         if username_exist:
             raise HTTPException( status_code=400, detail="O username já está cadastrado." )
+        
+    
+    # def validate_student( self, new_user ):
+    #     if not new_user.entity == "student":
+    #         return
+    #     if not new_user.photo:
+    #         raise HTTPException( status_code=400, detail="O estudante deve cadastrar uma foto." )                
 
 
     def validate_id( self, db: Session, *, id: str = id ) -> Dict[UsersModel,UserResponseSchema]:
@@ -49,6 +56,7 @@ class UsersService():
 
 
     def create_user( self, db: Session, *, object: UserRequestSchema ):
+
         created_user = UsersRepository.create(db, req_object=object)
     
         return response_user(created_user)

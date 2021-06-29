@@ -44,6 +44,13 @@ class ClassesService():
         
         return response_classes
 
+    
+    def create_classes_list_by_student( self, db: Session, *, id: str = id ):
+        classes = ClassesRepository.get_by_student( db, id=id )
+        response_classes = [response_class(class_item) for class_item in classes]
+        
+        return response_classes
+
 
     def update_class(
 

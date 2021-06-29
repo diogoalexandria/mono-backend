@@ -41,6 +41,13 @@ def list_topics_professor( income_id = Depends(Auth.wrapper), *, db: Session = D
     return topics_list
 
 
+@router.get('/topics_class/{id}', response_model=List[TopicResponseSchema])
+def list_topics_class( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:
+    topics_list = TopicsService.create_topics_list_by_class(db, id=id)
+
+    return topics_list
+
+
 @router.get('/topics/{id}', response_model=TopicResponseSchema)
 def list_topic( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), id: str = id ) -> Any:
     topic = TopicsService.validate_id(db, id=id)
