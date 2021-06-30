@@ -19,4 +19,4 @@ class UsersModel(Base):
     updated_at      = Column(DateTime , nullable=True)
     subscriptions   = relationship('SubscriptionsModel', cascade='all,delete', backref='users')
     professor   = relationship('ClassesModel', cascade='all,delete', backref='users')
-    # attendances   = relationship('AttendancesModel', cascade='all,delete', backref='users')
+    attendances   = relationship('AttendancesModel', cascade='all,delete', backref='users')

@@ -10,12 +10,13 @@ from fastapi import APIRouter, Depends
 router = APIRouter()
 
 @router.post('/attendances', response_model=List[AttendanceResponseSchema], status_code=201)
-def create_attendance( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), new_attendance: AttendancesListSchema ) -> Any:
+def create_attendances( income_id = Depends(Auth.wrapper), *, db: Session = Depends(db_session), new_attendances: AttendancesListSchema ) -> Any:
     AuthService.validate_professor_access(db, id=income_id)
-    
-    # ClassesService.validate_name(db, name=new_class.name)
 
-    created_attendances = AttendancesService.create_attendances(db, object=new_attendance)
+    validated_attendances = AttendancesService.validate_attendances(db, attendances=new_attendances.attendances)
+    print(validated_attendances)    
+
+    created_attendances = AttendancesService.create_attendances(db, attendances=validated_attendances)
     
     return created_attendances
     

@@ -3,7 +3,7 @@ from src.models.attendances_model import AttendancesModel
 from src.helpers.attendances import response_attendance, response_attendance_topic
 from src.repositories.attendances_repository import AttendancesRepository
 from src.schemas.status_schema import StatusOptions
-from typing import Dict, Union
+from typing import Dict, List, Union
 from fastapi import HTTPException
 from sqlalchemy.orm.session import Session
 
@@ -14,12 +14,23 @@ class AttendancesService():
         return response_attendance(attendance)
 
 
-    def create_attendances( self, db: Session, *, object: AttendancesListSchema ):
-        attendances = AttendancesRepository.create_multi(db, req_object=object)
+    def create_attendances( self, db: Session, *, attendances: AttendancesListSchema ):
+        attendances = AttendancesRepository.create_multi(db, attendances=attendances)
         
         response_attendances = [response_attendance(attendance) for attendance in attendances]
         
         return response_attendances
+
+    
+    def validate_attendances( self, db: Session, *, attendances: List[AttendanceBaseSchema] ):        
+        
+        validated_attendances = [AttendancesRepository.validate(db, attendance=attendance) for attendance in attendances]
+        
+        if len(validated_attendances) < 0:
+            print("Nenhuma aluno dessa aula encontrado")
+            raise HTTPException( status_code=400, detail="Nenhum aula dessa aula encontrado" )
+        
+        return validated_attendances
 
 
     def create_attendances_list( self, db: Session ):        
