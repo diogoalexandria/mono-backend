@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "python-api"
 version = "0.1.0"
-description = "Api para controle de instituicao de ensino"
+description = "Api para controle de instituição de ensino"
 authors = ["Diogo Alexandria"]
 
 packages = [

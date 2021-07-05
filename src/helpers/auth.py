@@ -13,7 +13,7 @@ class AuthHandler():
     security = HTTPBearer()
     password_context = CryptContext( schemes=["bcrypt"], deprecated="auto" )
     secret = os.environ['SECRET']
-    refresh_secret = os.environ['REFRESH_SECRET']
+    #refresh_secret = os.environ['REFRESH_SECRET']
 
     def hash_password( self, password: str ):
         return self.password_context.hash(password)
