@@ -10,8 +10,8 @@ ENV PYTHONFAULTHANDLER=1 \
   PIP_DISABLE_PIP_VERSION_CHECK=on \
   PIP_DEFAULT_TIMEOUT=100 \
   POETRY_VERSION=1.1.6 \
-  DATABASE_URL= \
-  SECRET=
+  DATABASE_URL=postgresql://fcgjeqik:PQZVGOZ5DP0wchwnxKQLmnMpFV_MvO93@batyr.db.elephantsql.com/fcgjeqik \
+  SECRET=segredo
 
 # System deps:
 # RUN apk add --no-cache gcc libffi-dev musl-dev postgresql-dev
